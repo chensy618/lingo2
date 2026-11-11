@@ -33,7 +33,7 @@ jobs:
           node-version: 22
 
       - name: Fetch base branch
-        run: git fetch origin "${{ github.base_ref }}" --depth=1
+        run: git fetch origin "${{ github.base_ref }}"
 
       - name: Validate content
         run: node scripts/validate-content.mjs
