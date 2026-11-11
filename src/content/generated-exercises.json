@@ -1,1 +1,108 @@
-[]
+[
+  {
+    "id": "ai_20261111_everyday_01_db99db",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "society",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "There are many children in my neighborhood.",
+        "My neighborhood has many children."
+      ],
+      "no": [
+        "Det er mange barn i nabolaget mitt.",
+        "Nabolaget mitt har mange barn."
+      ],
+      "zh": [
+        "我住的社区里有很多孩子。",
+        "我的社区里有很多孩子。"
+      ]
+    },
+    "tags": [
+      "society",
+      "community",
+      "there_is",
+      "quantity"
+    ],
+    "notes": [
+      {
+        "term": "nabolaget mitt",
+        "text": "“我的社区/街区”；挪威语中定指名词加物主代词可说 nabolaget mitt，也可说 mitt nabolag。"
+      },
+      {
+        "term": "Det er mange barn",
+        "text": "“有很多孩子”；det er 表示“有”，mange 后接复数不定名词 barn。"
+      },
+      {
+        "term": "社区",
+        "text": "对应 neighborhood；中文常用“社区里”表示在社区范围内。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-11T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "pending"
+    }
+  },
+  {
+    "id": "ai_20261111_everyday_02_71ebd9",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "opinion",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "I think this movie is good.",
+        "This movie is good, I think."
+      ],
+      "no": [
+        "Jeg synes denne filmen er bra.",
+        "Denne filmen er bra, synes jeg."
+      ],
+      "zh": [
+        "我觉得这部电影很好。",
+        "这部电影我觉得很好。"
+      ]
+    },
+    "tags": [
+      "opinion",
+      "expressing_opinion",
+      "adjective",
+      "simple_present"
+    ],
+    "notes": [
+      {
+        "term": "synes",
+        "text": "“觉得/认为”；表达主观看法常用 synes，结构为 Jeg synes + 从句。"
+      },
+      {
+        "term": "denne filmen",
+        "text": "“这部电影”；film 为阳性名词，单数定指形式是 filmen，前面用 denne。"
+      },
+      {
+        "term": "觉得",
+        "text": "中文表达看法的常用动词，结构为“我觉得 + 小句”。"
+      },
+      {
+        "term": "bra",
+        "text": "“好”；常用形容词，语气自然，适合 A1 日常表达。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-11T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "pending"
+    }
+  }
+]
