@@ -18,7 +18,7 @@
   --color-english: #355c7d;
   --color-norwegian: #2f5d50;
   --color-chinese: #a8543a;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "PingFang SC",
+  --font-sans: var(--font-commissioner), ui-sans-serif, system-ui, -apple-system, "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-display: var(--font-fraunces), "Iowan Old Style", "Palatino Linotype", Georgia,
     "Songti SC", serif;

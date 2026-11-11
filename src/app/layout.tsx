@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Commissioner, Fraunces } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "@/components/AppShell";
 
-const inter = Inter({
-  variable: "--font-inter",
+const commissioner = Commissioner({
+  variable: "--font-commissioner",
   subsets: ["latin"],
   display: "swap",
 });
@@ -34,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang="zh-CN" className={`${commissioner.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="min-h-full">
         <AppShell>{children}</AppShell>
       </body>
