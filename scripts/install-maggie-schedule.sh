@@ -10,6 +10,7 @@ LABEL="com.uit.lingo2.content"
 HOUR="${HOUR:-15}"
 
 mkdir -p "$KEY_DIR" "$HOME/Library/LaunchAgents" "$LOG_DIR"
+gh auth setup-git >/dev/null 2>&1 || true
 chmod 700 "$KEY_DIR"
 
 if [ -n "${MAGGIE_API_KEY:-}" ]; then

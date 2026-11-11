@@ -23,6 +23,7 @@ export MAGGIE_API_KEY
 command -v node >/dev/null || { log "node not found"; exit 1; }
 command -v gh >/dev/null || { log "gh not found"; exit 1; }
 gh auth status >/dev/null 2>&1 || { log "gh is not authenticated"; exit 1; }
+gh auth setup-git >/dev/null 2>&1 || true
 
 DATE="$(date +%F)"
 OPEN_PR="$(gh pr list --repo "$REPO" --state open --search "Content review: $DATE" --json number --jq '.[0].number // empty')"
@@ -61,9 +62,8 @@ git checkout -b "$BRANCH" >/dev/null
 git add src/content/generated-exercises.json
 git commit -m "Add Maggie content candidates for $DATE" >/dev/null
 
-TOKEN="$(gh auth token)"
 PUSH_URL="https://github.com/${REPO}.git"
-git -c http.extraheader="AUTHORIZATION: bearer $TOKEN" push "$PUSH_URL" "$BRANCH" >/dev/null
+git push "$PUSH_URL" "$BRANCH" >/dev/null
 log "Pushed branch $BRANCH"
 
 gh pr create \
