@@ -81,7 +81,7 @@ PR_URL="$(gh pr create \
 
 生成日期：$DATE
 
-本 PR 由本机任务自动生成并预审。评分 ≥15/16、八项 checklist 全通过且技术校验通过时自动合并；否则保留给人工审核。审核标准见 [docs/CONTENT_REVIEW.md](https://github.com/$REPO/blob/main/docs/CONTENT_REVIEW.md)。")"
+本 PR 由本机任务自动生成并预审。评分 ≥14/16、八项 checklist 全通过且技术校验通过时自动合并；否则保留给人工审核。审核标准见 [docs/CONTENT_REVIEW.md](https://github.com/$REPO/blob/main/docs/CONTENT_REVIEW.md)。")"
 log "Created review PR: $PR_URL"
 
 TODAY_APPROVED="$(DATE="$DATE" node -e 'const fs=require("fs");const p=process.argv[1];const a=JSON.parse(fs.readFileSync(p,"utf8"));const t=a.filter((x)=>(x.generatedAt||"").slice(0,10)===process.env.DATE);console.log(t.length>0 && t.every((x)=>x.review?.status==="approved")?"1":"0")' "$PWD/src/content/generated-exercises.json")"

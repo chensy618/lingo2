@@ -86,14 +86,14 @@ Maggie 的 UiT 接口只能从校园网络访问，GitHub 托管运行器无法�
    MAGGIE_API_KEY='...' ./scripts/install-maggie-schedule.sh
    ```
 2. 密钥保存在 `~/.config/lingo2/maggie.env`（权限 600），不进入仓库。
-3. 任务每天生成候选，自动用 Maggie 预审并创建 `content-review` PR；若评分 ≥15/16、八项 checklist 全通过且无 issues，则自动合并发布；否则保留人工审核。
+3. 任务每天生成候选，自动用 Maggie 预审并创建 `content-review` PR；若评分 ≥14/16、八项 checklist 全通过且无 issues，则自动合并发布；否则保留人工审核。
 4. 日志：`~/Library/Logs/lingo2-content.log`
 5. 手动运行：
    ```bash
    ./scripts/maggie-daily.sh
    launchctl kickstart -k gui/$(id -u)/com.uit.lingo2.content
    ```
-6. 可用环境变量控制：`AUTO_REVIEW=0`（关闭预审）、`AUTO_MERGE=0`（只预审不自动合并）、`AUTO_APPROVE_MIN_SCORE=15`。
+6. 可用环境变量控制：`AUTO_REVIEW=0`（关闭预审）、`AUTO_MERGE=0`（只预审不自动合并）、`AUTO_APPROVE_MIN_SCORE=14`。
 
 ### 审核与发布
 

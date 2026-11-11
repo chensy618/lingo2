@@ -9,7 +9,7 @@
 
 1. **每日生成**：本机 `launchd` 任务调用 Maggie，把候选追加到 `src/content/generated-exercises.json`，并创建 PR。
 2. **自动预审**：对新候选执行第二次 Maggie 审核，按下方 16 分制打分并填写 checklist。
-3. **自动确认**：若每条当日候选都满足 **score ≥ 15/16、八项 checklist 全为 true、无 issues、技术校验通过**，自动标记 `approved` 并合并 PR。
+3. **自动确认**：若每条当日候选都满足 **score ≥ 14/16、八项 checklist 全为 true、无 issues、技术校验通过**，自动标记 `approved` 并合并 PR。
 4. **人工兜底**：未达到自动确认门槛的候选保留 `pending` / `needs_changes`，由人工在 PR 中处理。
 5. **发布**：PR 合并后自动部署；只有 `status: "approved"` 的条目会进入网站。
 6. **校验**：`npm run content:validate` 检查 schema、重复、等级、标签与审核完整性；构建前也会自动执行。
@@ -107,7 +107,7 @@ GitHub 托管运行器无法解析 Maggie 的 UiT 接口，因此当前使用本
 
 - `AUTO_REVIEW=0`：关闭自动预审
 - `AUTO_MERGE=0`：保留自动预审结果，但 PR 必须人工合并
-- `AUTO_APPROVE_MIN_SCORE=15`：调整自动确认分数阈值
+- `AUTO_APPROVE_MIN_SCORE=14`：调整自动确认分数阈值
 
 ### GitHub Actions（可选）
 

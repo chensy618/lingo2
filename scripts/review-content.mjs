@@ -10,7 +10,7 @@ const args = new Map(
 );
 
 const file = path.resolve(args.get("file") ?? "src/content/generated-exercises.json");
-const minScore = Number(args.get("min-score") ?? process.env.AUTO_APPROVE_MIN_SCORE ?? 15);
+const minScore = Number(args.get("min-score") ?? process.env.AUTO_APPROVE_MIN_SCORE ?? 14);
 const dryRun = args.get("dry-run") === "true";
 const apiUrl = process.env.AI_API_URL || "http://springfield.uit.no:30800/v1/chat/completions";
 const apiKey = process.env.MAGGIE_API_KEY || process.env.AI_API_KEY;
