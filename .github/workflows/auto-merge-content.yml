@@ -1,0 +1,55 @@
+name: Auto-merge approved content
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    paths:
+      - "src/content/generated-exercises.json"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: content-auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  merge:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.head_ref, 'content/') &&
+      github.event.pull_request.draft == false &&
+      !contains(github.event.pull_request.labels.*.name, 'manual-merge')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch base branch
+        run: git fetch origin "${{ github.base_ref }}" --depth=1
+
+      - name: Validate content
+        run: node scripts/validate-content.mjs
+
+      - name: Check review status
+        id: approval
+        run: node scripts/check-content-approval.mjs --base="origin/${{ github.base_ref }}"
+
+      - name: Merge approved PR
+        if: steps.approval.outputs.should_merge == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          STATE="$(gh pr view "$PR_NUMBER" --json state --jq .state)"
+          if [ "$STATE" = "OPEN" ]; then
+            gh pr merge "$PR_NUMBER" --squash --delete-branch
+          else
+            echo "PR is already $STATE; nothing to merge."
+          fi

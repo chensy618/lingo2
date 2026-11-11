@@ -71,12 +71,20 @@ PUSH_URL="https://github.com/${REPO}.git"
 git push "$PUSH_URL" "$BRANCH" >/dev/null
 log "Pushed branch $BRANCH"
 
+gh label create content-review --color FBCA04 --description "Needs content review" >/dev/null 2>&1 || true
+gh label create manual-merge --color 0E8A16 --description "Do not auto-merge content" >/dev/null 2>&1 || true
+
+LABELS=(--label content-review)
+if [ "${AUTO_MERGE:-1}" = "0" ]; then
+  LABELS+=(--label manual-merge)
+fi
+
 PR_URL="$(gh pr create \
   --repo "$REPO" \
   --head "$BRANCH" \
   --base main \
   --title "Content review: $DATE (Maggie)" \
-  --label content-review \
+  "${LABELS[@]}" \
   --body "## Maggie 内容候选
 
 生成日期：$DATE

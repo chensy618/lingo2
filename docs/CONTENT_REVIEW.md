@@ -10,9 +10,10 @@
 1. **每日生成**：本机 `launchd` 任务调用 Maggie，把候选追加到 `src/content/generated-exercises.json`，并创建 PR。
 2. **自动预审**：对新候选执行第二次 Maggie 审核，按下方 16 分制打分并填写 checklist。
 3. **自动确认**：若每条当日候选都满足 **score ≥ 14/16、八项 checklist 全为 true、无 issues、技术校验通过**，自动标记 `approved` 并合并 PR。
-4. **人工兜底**：未达到自动确认门槛的候选保留 `pending` / `needs_changes`，由人工在 PR 中处理。
-5. **发布**：PR 合并后自动部署；只有 `status: "approved"` 的条目会进入网站。
-6. **校验**：`npm run content:validate` 检查 schema、重复、等级、标签与审核完整性；构建前也会自动执行。
+4. **人工兜底**：未达到自动确认门槛的候选保留 `pending` / `needs_changes`，由人工在 PR 中处理。人工改为 `approved` 并推送后，`Auto-merge approved content` 工作流会自动合并。
+5. **人工暂缓**：给 PR 添加 `manual-merge` 标签可阻止自动合并；移除标签后会重新检查并合并。
+6. **发布**：PR 合并后自动部署；只有 `status: "approved"` 的条目会进入网站。
+7. **校验**：`npm run content:validate` 检查 schema、重复、等级、标签与审核完整性；构建前也会自动执行。
 
 自动审核由同一 Maggie 模型完成，不等同于独立人工复核。建议定期抽查已自动合并的内容；需要更严格时可以关闭自动合并。
 
@@ -106,7 +107,7 @@ GitHub 托管运行器无法解析 Maggie 的 UiT 接口，因此当前使用本
 自动确认开关（可写在 `~/.config/lingo2/maggie.env`）：
 
 - `AUTO_REVIEW=0`：关闭自动预审
-- `AUTO_MERGE=0`：保留自动预审结果，但 PR 必须人工合并
+- `AUTO_MERGE=0`：保留自动预审结果，给 PR 添加 `manual-merge` 标签，阻止自动合并
 - `AUTO_APPROVE_MIN_SCORE=14`：调整自动确认分数阈值
 
 ### GitHub Actions（可选）

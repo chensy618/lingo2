@@ -97,7 +97,12 @@ Maggie 的 UiT 接口只能从校园网络访问，GitHub 托管运行器无法�
 
 ### 审核与发布
 
-审核者按 [`docs/CONTENT_REVIEW.md`](docs/CONTENT_REVIEW.md) 的 16 分制标准逐条检查，可直接修改 PR 中的 `review` 字段。只有 `review.status === "approved"` 的条目会被前端加载；达到自动确认门槛的 PR 会自动合并，其余保留人工审核。构建前自动运行 `npm run content:validate`。
+审核者按 [`docs/CONTENT_REVIEW.md`](docs/CONTENT_REVIEW.md) 的 16 分制标准逐条检查，可直接修改 PR 中的 `review` 字段。只有 `review.status === "approved"` 的条目会被前端加载。
+
+- 本地自动预审达到 14/16 门槛时，会直接合并 PR。
+- 人工把候选改为 `approved` 并推送后，`Auto-merge approved content` 工作流会自动合并。
+- 若想暂缓自动合并，给 PR 添加 `manual-merge` 标签；移除后工作流会再次检查并合并。
+- 构建前自动运行 `npm run content:validate`。
 
 审核标准包括语义对齐、自然度、等级匹配、语域、语法、解析准确性、原创与安全、技术规范；八项必须全过且总分至少 14/16。
 
