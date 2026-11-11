@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "id": "ai_20261111_everyday_01_d24dd7",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "society",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "I like to read before I sleep."
+      ],
+      "no": [
+        "Jeg liker å lese før jeg sover."
+      ],
+      "zh": [
+        "我喜欢睡前看书。"
+      ]
+    },
+    "tags": [
+      "daily_routine",
+      "habits"
+    ],
+    "notes": [
+      {
+        "term": "før jeg sover",
+        "text": "“在我睡觉之前”；før 引导从句时使用正常陈述词序。"
+      },
+      {
+        "term": "liker å lese",
+        "text": "“喜欢读书”；liker 后接 å + 不定式。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-11T00:00:00.000Z",
+    "model": "fixture",
+    "review": {
+      "status": "pending"
+    }
+  }
+]
