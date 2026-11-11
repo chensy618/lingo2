@@ -6,7 +6,7 @@
     "topic": "society",
     "levels": {
       "en": "A1",
-      "no": "A1",
+      "no": "A2",
       "zh": "A1"
     },
     "variants": {
@@ -26,8 +26,8 @@
     "tags": [
       "society",
       "community",
-      "there_is",
-      "quantity"
+      "existential",
+      "numbers_units"
     ],
     "notes": [
       {
@@ -47,7 +47,21 @@
     "generatedAt": "2026-11-11T00:00:00.000Z",
     "model": "maggie",
     "review": {
-      "status": "pending"
+      "status": "approved",
+      "reviewer": "maggie-review (AI-assisted)",
+      "reviewedAt": "2026-11-11T14:40:46Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": true,
+        "naturalness": true,
+        "levelFit": true,
+        "registerFit": true,
+        "grammar": true,
+        "notesAccuracy": true,
+        "originality": true,
+        "technical": true
+      },
+      "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
   },
   {
@@ -57,7 +71,7 @@
     "topic": "opinion",
     "levels": {
       "en": "A1",
-      "no": "A1",
+      "no": "A2",
       "zh": "A1"
     },
     "variants": {
@@ -70,20 +84,20 @@
         "Denne filmen er bra, synes jeg."
       ],
       "zh": [
-        "我觉得这部电影很好。",
-        "这部电影我觉得很好。"
+        "我觉得这部电影不错。",
+        "这部电影我觉得不错。"
       ]
     },
     "tags": [
       "opinion",
       "expressing_opinion",
       "adjective",
-      "simple_present"
+      "present_tense"
     ],
     "notes": [
       {
         "term": "synes",
-        "text": "“觉得/认为”；表达主观看法常用 synes，结构为 Jeg synes + 从句。"
+        "text": "“觉得/认为”；表达主观看法常用 synes，结构为 Jeg synes (at) + 从句，本句省略 at。"
       },
       {
         "term": "denne filmen",
@@ -102,7 +116,21 @@
     "generatedAt": "2026-11-11T00:00:00.000Z",
     "model": "maggie",
     "review": {
-      "status": "pending"
+      "status": "approved",
+      "reviewer": "maggie-review (AI-assisted)",
+      "reviewedAt": "2026-11-11T14:40:46Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": true,
+        "naturalness": true,
+        "levelFit": true,
+        "registerFit": true,
+        "grammar": true,
+        "notesAccuracy": true,
+        "originality": true,
+        "technical": true
+      },
+      "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
   }
 ]
