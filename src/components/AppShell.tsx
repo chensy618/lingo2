@@ -39,13 +39,8 @@ export function Logo({ compact = false }: { compact?: boolean }) {
         </span>
       </span>
       {!compact && (
-        <span className="flex flex-col leading-none">
-          <span className="font-display text-[1.3rem] tracking-[-0.03em] text-ink">
-            lingo<sup className="ml-0.5 text-[0.6rem] text-coral">2</sup>
-          </span>
-          <span className="mt-1 text-[0.55rem] font-medium uppercase tracking-[0.16em] text-ink-faint">
-            en · no · 中文
-          </span>
+        <span className="font-display text-[1.3rem] leading-none tracking-[-0.03em] text-ink">
+          lingo<sup className="ml-0.5 text-[0.6rem] text-coral">2</sup>
         </span>
       )}
     </div>
