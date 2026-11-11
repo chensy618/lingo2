@@ -39,7 +39,20 @@ jobs:
         with:
           node-version: 22
 
+      - name: Check AI configuration
+        id: ai
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+        run: |
+          if [ -n "$AI_API_KEY" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::AI_API_KEY is not configured; skipping content generation."
+          fi
+
       - name: Generate candidates
+        if: steps.ai.outputs.ready == 'true' || github.event.inputs.fixture == 'true'
         env:
           AI_API_URL: ${{ secrets.AI_API_URL }}
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
@@ -55,18 +68,22 @@ jobs:
           node scripts/generate-content.mjs $ARGS
 
       - name: Validate candidates
+        if: steps.ai.outputs.ready == 'true' || github.event.inputs.fixture == 'true'
         run: node scripts/validate-content.mjs
 
       - name: Prepare pull request metadata
+        if: steps.ai.outputs.ready == 'true' || github.event.inputs.fixture == 'true'
         id: meta
         run: echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
 
       - name: Ensure review label exists
+        if: steps.ai.outputs.ready == 'true' || github.event.inputs.fixture == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh label create content-review --color FBCA04 --description "Needs content review" || true
 
       - name: Open review PR
+        if: steps.ai.outputs.ready == 'true' || github.event.inputs.fixture == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
