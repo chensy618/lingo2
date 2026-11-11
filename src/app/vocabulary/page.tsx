@@ -196,7 +196,7 @@ export default function VocabularyPage() {
                   >
                     <div className="flex items-center gap-2">
                       <LangBadge lang={focusLang} size="sm" />
-                      <span className="font-display text-[1.05rem] leading-none text-ink">
+                      <span className="text-[1rem] font-semibold leading-none text-ink">
                         {entry.translations[focusLang].split(" / ")[0]}
                       </span>
                       <span className="ml-auto flex items-center gap-1.5">
@@ -242,7 +242,7 @@ export default function VocabularyPage() {
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                   <div>
                     <p className="eyebrow mb-1">{LANGUAGES[focusLang].label}</p>
-                    <h2 className="font-display text-[2rem] leading-none tracking-[-0.03em] text-ink">
+                    <h2 className="text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] text-ink">
                       {selected.translations[focusLang]}
                     </h2>
                   </div>
@@ -330,7 +330,7 @@ export default function VocabularyPage() {
                         </div>
                         <p
                           className={cn(
-                            "mt-1.5 font-display text-[0.95rem] leading-relaxed text-ink transition",
+                            "mt-1.5 text-[0.9rem] leading-relaxed text-ink transition",
                             lang !== focusLang && hideMeanings && "blur-[5px]",
                           )}
                         >

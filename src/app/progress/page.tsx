@@ -293,7 +293,7 @@ export default function ProgressPage() {
                       <LevelPill level={attempt.level} muted />
                       <span className="ml-auto text-[0.62rem] text-ink-faint">{displayDate(attempt.createdAt)}</span>
                     </div>
-                    <p className="mt-3 font-display text-[1.05rem] leading-snug text-ink">
+                    <p className="mt-3 text-[0.95rem] font-medium leading-snug text-ink">
                       {exercise.variants[attempt.source][0]}
                     </p>
                     <p className="mt-2 line-clamp-2 text-[0.72rem] leading-relaxed text-ink-faint">

@@ -643,7 +643,7 @@ function TranslationClient() {
               译为 {targetMeta.zhLabel}
             </div>
 
-            <p className="mt-5 font-display text-[1.55rem] leading-[1.35] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
+            <p className="mt-5 text-[1.35rem] font-medium leading-[1.5] text-ink sm:text-[1.55rem]">
               {current.variants[config.source][0]}
             </p>
 
@@ -663,7 +663,7 @@ function TranslationClient() {
               disabled={submitted}
               rows={5}
               placeholder={PLACEHOLDERS[config.target]}
-              className="field mt-3 min-h-[8.5rem] resize-y font-display text-[1.05rem] leading-relaxed disabled:bg-paper/60 disabled:text-ink-soft"
+              className="field mt-3 min-h-[8.5rem] resize-y text-[0.95rem] leading-relaxed disabled:bg-paper/60 disabled:text-ink-soft"
               onKeyDown={(event) => {
                 if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
                   event.preventDefault();
@@ -746,7 +746,7 @@ function TranslationClient() {
                       {targetMeta.label} · 目标语言
                     </p>
                   </div>
-                  <p className="mt-3 font-display text-[1.2rem] leading-relaxed text-ink">
+                  <p className="mt-3 text-[1.05rem] font-medium leading-relaxed text-ink">
                     {current.variants[config.target][0]}
                   </p>
                   {current.variants[config.target].length > 1 && (

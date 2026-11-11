@@ -92,7 +92,7 @@ export default function DashboardPage() {
               </span>
               <TrackPill track={continueTrack} />
             </div>
-            <p className="mt-4 font-display text-[1.45rem] leading-snug tracking-[-0.02em] text-ink sm:text-[1.65rem]">
+            <p className="mt-4 text-[1.25rem] font-medium leading-snug text-ink sm:text-[1.4rem]">
               “{prompt}”
             </p>
           </div>
