@@ -42,13 +42,14 @@ jobs:
       - name: Check AI configuration
         id: ai
         env:
+          MAGGIE_API_KEY: ${{ secrets.MAGGIE_API_KEY }}
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
         run: |
-          if [ -n "$AI_API_KEY" ]; then
+          if [ -n "$MAGGIE_API_KEY" ] || [ -n "$AI_API_KEY" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::AI_API_KEY is not configured; skipping content generation."
+            echo "::warning::No model API key is configured; skipping content generation."
           fi
 
       - name: Generate candidates
@@ -56,6 +57,7 @@ jobs:
         env:
           AI_API_URL: ${{ secrets.AI_API_URL }}
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          MAGGIE_API_KEY: ${{ secrets.MAGGIE_API_KEY }}
           AI_MODEL: ${{ secrets.AI_MODEL }}
           AI_TEMPERATURE: ${{ secrets.AI_TEMPERATURE }}
           CONTENT_COUNT: ${{ github.event.inputs.count || '6' }}

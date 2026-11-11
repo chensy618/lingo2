@@ -18,7 +18,7 @@ const output = path.resolve(args.get("output") ?? "src/content/generated-exercis
 const today = args.get("date") ?? new Date().toISOString().slice(0, 10);
 const dateCompact = today.replace(/-/g, "");
 const existing = fs.existsSync(output) ? JSON.parse(fs.readFileSync(output, "utf8")) : [];
-const MODEL = process.env.AI_MODEL || "gpt-4.1-mini";
+const MODEL = process.env.AI_MODEL || "maggie";
 const existingSentences = existing
   .flatMap((item) => Object.values(item.variants ?? {}).flat())
   .slice(-80);
@@ -82,10 +82,10 @@ Do not include id, origin, generatedAt, model or review fields; the pipeline wil
 }
 
 async function generateWithModel(items) {
-  const apiUrl = process.env.AI_API_URL || "https://api.openai.com/v1/chat/completions";
-  const apiKey = process.env.AI_API_KEY;
+  const apiUrl = process.env.AI_API_URL || "http://springfield.uit.no:30800/v1/chat/completions";
+  const apiKey = process.env.MAGGIE_API_KEY || process.env.AI_API_KEY;
   const model = MODEL;
-  if (!apiKey) throw new Error("AI_API_KEY is required unless --fixture is used.");
+  if (!apiKey) throw new Error("MAGGIE_API_KEY is required unless --fixture is used.");
 
   const response = await fetch(apiUrl, {
     method: "POST",
