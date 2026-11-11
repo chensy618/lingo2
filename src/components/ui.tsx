@@ -12,7 +12,7 @@ export function PageHeader({
   description,
   action,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description?: string;
   action?: ReactNode;
@@ -20,7 +20,7 @@ export function PageHeader({
   return (
     <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <p className="eyebrow mb-2">{eyebrow}</p>
+        {eyebrow && <p className="eyebrow mb-2">{eyebrow}</p>}
         <h1 className="font-display text-[2.1rem] leading-[1.05] tracking-[-0.035em] text-ink sm:text-[2.5rem]">
           {title}
         </h1>

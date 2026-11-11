@@ -10,13 +10,10 @@ import { cn } from "@/lib/utils";
 import {
   BookmarkIcon,
   CheckCircleIcon,
-  FilterIcon,
-  LayersIcon,
-  QuoteIcon,
   RotateIcon,
   SparkIcon,
 } from "@/components/icons";
-import { LangBadge, LevelPill, PageHeader, ProgressBar, SectionHeading, TrackPill } from "@/components/ui";
+import { LangBadge, LevelPill, PageHeader, TrackPill } from "@/components/ui";
 import type { VocabStatus } from "@/lib/types";
 
 type StatusFilter = "all" | "new" | "learning" | "known";
@@ -84,44 +81,13 @@ export default function VocabularyPage() {
   return (
     <div className="animate-fade">
       <PageHeader
-        eyebrow="Vocabulary"
         title="词汇学习"
-        description="词汇不是三种语言的一一映射。每张卡片围绕一个概念，呈现语境化释义、搭配、词形与三语言例句。"
-        action={
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setHideMeanings((value) => !value)}
-              className={cn("btn-secondary text-[0.76rem]", hideMeanings && "border-gold/50 bg-gold-soft text-[#7a5c26]")}
-            >
-              <LayersIcon className="h-3.5 w-3.5" />
-              {hideMeanings ? "显示释义" : "回忆模式"}
-            </button>
-          </div>
-        }
+        description={`围绕概念学习三语言释义、搭配与例句。${knownCount} 个已掌握，${learningCount} 个学习中。`}
       />
-
-      <div className="mb-5 grid grid-cols-3 gap-3">
-        <div className="surface-flat px-4 py-3">
-          <p className="text-[0.62rem] uppercase tracking-[0.13em] text-ink-faint">词条总数</p>
-          <p className="mt-1 font-display text-xl text-ink">{VOCABULARY.length}</p>
-        </div>
-        <div className="surface-flat px-4 py-3">
-          <p className="text-[0.62rem] uppercase tracking-[0.13em] text-ink-faint">学习中</p>
-          <p className="mt-1 font-display text-xl text-gold">{learningCount}</p>
-        </div>
-        <div className="surface-flat px-4 py-3">
-          <p className="text-[0.62rem] uppercase tracking-[0.13em] text-ink-faint">已掌握</p>
-          <p className="mt-1 font-display text-xl text-moss">{knownCount}</p>
-        </div>
-      </div>
 
       <div className="surface mb-5 p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="eyebrow mr-1 inline-flex items-center gap-1.5">
-            <FilterIcon className="h-3.5 w-3.5" />
-            学习语言
-          </span>
+          <span className="mr-1 text-[0.7rem] font-semibold text-ink-faint">学习语言</span>
           {LANG_CODES.map((lang) => {
             const active = focusLang === lang;
             return (
@@ -251,13 +217,7 @@ export default function VocabularyPage() {
                     <p className={cn("mt-1.5 line-clamp-2 text-[0.72rem] leading-relaxed text-ink-faint", hideMeanings && "blur-[3px]")}>
                       {entry.definitions[focusLang]}
                     </p>
-                    <div className="mt-2 flex items-center gap-1.5">
-                      <span className="text-[0.58rem] uppercase tracking-[0.1em] text-ink-faint">{entry.pos}</span>
-                      <span className="h-0.5 w-0.5 rounded-full bg-line-strong" />
-                      <span className="text-[0.58rem] text-ink-faint">
-                        {TOPICS.find((topic) => topic.id === entry.topic)?.label}
-                      </span>
-                    </div>
+                    <p className="mt-1.5 text-[0.58rem] uppercase tracking-[0.1em] text-ink-faint">{entry.pos}</p>
                   </button>
                 );
               })}
@@ -405,19 +365,6 @@ export default function VocabularyPage() {
                     ))}
                   </div>
                 </div>
-
-                {selected.related && (
-                  <div className="border-t border-line px-5 py-4 sm:px-6">
-                    <p className="text-[0.64rem] font-semibold uppercase tracking-[0.12em] text-ink-faint">Related</p>
-                    <div className="mt-2 flex flex-wrap gap-1.5">
-                      {selected.related.map((word) => (
-                        <span key={word} className="chip">
-                          {word}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
 
               <div className="border-t border-line bg-paper/50 px-5 py-4 sm:px-6">
@@ -454,36 +401,6 @@ export default function VocabularyPage() {
         </div>
       )}
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-[1.3fr_1fr]">
-        <section className="surface p-5 sm:p-6">
-          <SectionHeading eyebrow="Study routine" title="建议的词汇练习顺序" />
-          <div className="grid gap-3 sm:grid-cols-3">
-            {[
-              { step: "01", title: "先看语境", text: "读三语言例句，确认这个概念在真实句子里怎么用。" },
-              { step: "02", title: "回忆表达", text: "打开回忆模式，遮住释义，尝试说出目标语言的词与搭配。" },
-              { step: "03", title: "标记状态", text: "用“学习中 / 已掌握”记录掌握度，形成自己的词表。" },
-            ].map((item) => (
-              <div key={item.step} className="rounded-2xl border border-line bg-white/40 p-4">
-                <span className="font-display text-[0.8rem] text-coral">{item.step}</span>
-                <p className="mt-2 text-[0.82rem] font-semibold text-ink">{item.title}</p>
-                <p className="mt-1 text-[0.68rem] leading-relaxed text-ink-faint">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-        <section className="overflow-hidden rounded-[1.75rem] border border-moss/20 bg-moss p-5 text-paper-light sm:p-6">
-          <QuoteIcon className="h-5 w-5 text-gold" />
-          <p className="mt-3 font-display text-[1.15rem] leading-snug tracking-[-0.01em]">
-            一个词真正被学会，不是因为你记住了它的翻译，而是因为你在一个合适的句子里选中了它。
-          </p>
-          <div className="mt-4 flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.14em] text-paper-light/55">
-            <ProgressBar value={Math.round((knownCount / VOCABULARY.length) * 100)} className="max-w-[8rem] bg-paper-light/20" />
-            <span>
-              {knownCount}/{VOCABULARY.length} 已掌握
-            </span>
-          </div>
-        </section>
-      </div>
     </div>
   );
 }

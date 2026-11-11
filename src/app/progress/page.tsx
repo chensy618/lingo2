@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { EXERCISE_MAP } from "@/lib/exercises";
-import { TOPICS } from "@/lib/topics";
 import { VOCABULARY } from "@/lib/vocabulary";
 import {
   attemptsToday,
@@ -44,7 +43,6 @@ import {
   ProgressBar,
   SectionHeading,
   StatCard,
-  TrackPill,
 } from "@/components/ui";
 
 type Tab = "recent" | "review" | "bookmarks";
@@ -92,7 +90,6 @@ export default function ProgressPage() {
   return (
     <div className="animate-fade">
       <PageHeader
-        eyebrow="My progress"
         title="学习记录"
         description="每种语言独立记录等级与练习情况。这里也保存你的错题、收藏和自评结果。"
         action={
@@ -133,7 +130,6 @@ export default function ProgressPage() {
       <div className="mt-5 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
         <section className="surface p-5 sm:p-6">
           <SectionHeading
-            eyebrow="Last 7 days"
             title="最近一周"
             action={<span className="text-[0.66rem] text-ink-faint">{weekCounts.reduce((sum, day) => sum + day.count, 0)} 题</span>}
           />
@@ -161,7 +157,7 @@ export default function ProgressPage() {
         </section>
 
         <section className="surface p-5 sm:p-6">
-          <SectionHeading eyebrow="Per language" title="分语言进度" />
+          <SectionHeading title="分语言进度" />
           <div className="space-y-4">
             {LANG_CODES.map((lang) => {
               const languageAttempts = attempts.filter((attempt) => attempt.target === lang);
@@ -243,11 +239,8 @@ export default function ProgressPage() {
                         <p className="truncate text-[0.82rem] font-medium text-ink">
                           {exercise.variants[attempt.source][0]}
                         </p>
-                        <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[0.62rem] text-ink-faint">
+                        <div className="mt-1 flex items-center gap-1.5 text-[0.62rem] text-ink-faint">
                           <LevelPill level={attempt.level} muted />
-                          <TrackPill track={attempt.track} />
-                          <span>{TOPICS.find((topic) => topic.id === exercise.topic)?.label}</span>
-                          <span className="h-0.5 w-0.5 rounded-full bg-line-strong" />
                           <span>{displayDate(attempt.createdAt)}</span>
                         </div>
                       </div>
@@ -408,20 +401,6 @@ export default function ProgressPage() {
           ))}
       </div>
 
-      <div className="mt-8 rounded-3xl border border-line bg-white/35 p-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-[0.78rem] font-semibold text-ink">所有数据保存在此浏览器</p>
-            <p className="mt-1 text-[0.7rem] text-ink-faint">
-              当前版本不需要登录。清除浏览器数据会同时清空练习记录、自评与收藏。
-            </p>
-          </div>
-          <Link href="/settings" className="btn-secondary text-[0.72rem]">
-            管理数据与偏好
-            <ArrowRightIcon className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }

@@ -14,10 +14,6 @@ import { cn } from "@/lib/utils";
 import {
   CheckCircleIcon,
   ChevronDownIcon,
-  GlobeIcon,
-  SparkIcon,
-  TargetIcon,
-  TranslateIcon,
 } from "@/components/icons";
 import { LangBadge, PageHeader, SectionHeading } from "@/components/ui";
 
@@ -69,7 +65,6 @@ export default function SettingsPage() {
   return (
     <div className="animate-fade">
       <PageHeader
-        eyebrow="Settings"
         title="设置"
         description="设置只影响默认练习配置，不会锁定学习方向。每次开始练习时仍可单独调整。"
         action={
@@ -87,7 +82,7 @@ export default function SettingsPage() {
       <div className="grid gap-5 lg:grid-cols-[1.35fr_1fr]">
         <div className="space-y-5">
           <section className="surface p-5 sm:p-6">
-            <SectionHeading eyebrow="Defaults" title="默认练习配置" />
+            <SectionHeading title="默认练习配置" />
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <span className="label">默认目标语言</span>
@@ -237,7 +232,7 @@ export default function SettingsPage() {
           </section>
 
           <section className="surface p-5 sm:p-6">
-            <SectionHeading eyebrow="Language profiles" title="各语言档案等级" />
+            <SectionHeading title="各语言档案等级" />
             <p className="-mt-2 mb-4 text-[0.7rem] leading-relaxed text-ink-faint">
               这是你为自己设定的当前水平。它与题目难度分开标记，用于首页的进度展示。
             </p>
@@ -286,7 +281,7 @@ export default function SettingsPage() {
 
         <div className="space-y-4">
           <section className="surface p-5 sm:p-6">
-            <SectionHeading eyebrow="Data" title="数据管理" />
+            <SectionHeading title="数据管理" />
             <div className="space-y-2.5">
               <button type="button" onClick={exportData} className="btn-secondary w-full text-[0.76rem]">
                 导出本地数据（JSON）
@@ -315,49 +310,12 @@ export default function SettingsPage() {
             </div>
           </section>
 
-          <section className="surface p-5 sm:p-6">
-            <SectionHeading eyebrow="Interface" title="界面与规范" />
-            <div className="space-y-3">
-              {[
-                { icon: GlobeIcon, label: "界面语言", value: "简体中文" },
-                { icon: TranslateIcon, label: "挪威语规范", value: "Bokmål" },
-                { icon: GateIcon, label: "中文形式", value: "简体中文" },
-                { icon: TargetIcon, label: "英语拼写", value: "统一拼写（后续可切换）" },
-              ].map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.label} className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-paper text-ink-faint">
-                      <Icon className="h-3.5 w-3.5" />
-                    </span>
-                    <span className="flex-1 text-[0.72rem] text-ink-soft">{item.label}</span>
-                    <span className="text-[0.68rem] font-medium text-ink">{item.value}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
 
-          <section className="rounded-3xl border border-moss/20 bg-moss p-5 text-paper-light">
-            <SparkIcon className="h-5 w-5 text-gold" />
-            <p className="mt-3 font-display text-[1.1rem] leading-snug">
-              当前为 MVP：参考译文与自评优先，AI 反馈将在下一阶段接入。
-            </p>
-            <p className="mt-2 text-[0.68rem] leading-relaxed text-paper-light/60">
-              自动比对只衡量与参考译文的结构相似度，不代表你的表达不自然。真正的判断标准是语义准确、语法正确、表达自然和语域合适。
-            </p>
-          </section>
+
+
         </div>
       </div>
     </div>
   );
 }
 
-function GateIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M5 4.5h14v15H5z" />
-      <path d="M8.5 8h7M8.5 12h7M8.5 16h4" />
-    </svg>
-  );
-}

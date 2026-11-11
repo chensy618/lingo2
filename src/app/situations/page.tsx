@@ -12,11 +12,9 @@ import { cn, sessionHref } from "@/lib/utils";
 import {
   ArrowRightIcon,
   ArrowUpRightIcon,
-  CheckCircleIcon,
   CompassIcon,
-  SparkIcon,
 } from "@/components/icons";
-import { LangBadge, LevelPill, PageHeader, SectionHeading, TrackPill } from "@/components/ui";
+import { LangBadge, LevelPill, PageHeader, TrackPill } from "@/components/ui";
 
 function exerciseFor(topic: string, track: BaseTrack) {
   return (
@@ -37,9 +35,8 @@ export default function SituationsPage() {
   return (
     <div className="animate-fade">
       <PageHeader
-        eyebrow="Situational practice"
         title="情境练习"
-        description="从真实场景进入语言。每个情境都围绕一个交际目标组织：先做什么、怎么说、遇到变化如何回应。"
+        description="按真实交际场景进入对应等级的翻译练习。"
         action={
           <Link href="/translation" className="btn-secondary text-[0.76rem]">
             自由翻译练习
@@ -54,12 +51,9 @@ export default function SituationsPage() {
           <div className="max-w-xl">
             <div className="flex items-center gap-2">
               <CompassIcon className="h-4 w-4 text-moss" />
-              <p className="eyebrow">Choose your output</p>
+              <h2 className="font-display text-lg text-ink">目标语言</h2>
             </div>
-            <h2 className="mt-2 font-display text-xl text-ink">这次你想用哪种语言表达？</h2>
-            <p className="mt-1 text-[0.74rem] leading-relaxed text-ink-faint">
-              情境本身不绑定学习方向。选择目标语言后，每个场景会带你进入对应等级的翻译练习。
-            </p>
+            <p className="mt-1 text-[0.72rem] text-ink-faint">选择后进入对应等级的情境练习。</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {LANG_CODES.map((lang) => {
@@ -172,22 +166,9 @@ export default function SituationsPage() {
                 </p>
                 <p className="mt-2.5 text-[0.74rem] leading-relaxed text-ink-soft">{scenario.description}</p>
 
-                <div className="mt-4 space-y-2">
-                  {scenario.steps.map((step, stepIndex) => (
-                    <div key={step} className="flex items-start gap-2.5">
-                      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-moss-soft text-[0.52rem] font-bold text-moss">
-                        {stepIndex + 1}
-                      </span>
-                      <span className="text-[0.7rem] leading-relaxed text-ink-soft">{step}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  <span className="chip">{TOPICS.find((topic) => topic.id === scenario.topic)?.label}</span>
-                  <span className="chip">目标：{LANGUAGES[activeTarget].zhLabel}</span>
-                  <span className="chip">提示：{LANGUAGES[source].zhLabel}</span>
-                </div>
+                <p className="mt-4 text-[0.64rem] text-ink-faint">
+                  {TOPICS.find((topic) => topic.id === scenario.topic)?.label}
+                </p>
               </div>
 
               <div className="border-t border-line bg-paper/45 px-5 py-3.5">
@@ -217,39 +198,6 @@ export default function SituationsPage() {
         })}
       </div>
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_1.2fr]">
-        <section className="surface p-5 sm:p-6">
-          <SectionHeading eyebrow="Coming next" title="后续会加入的练习形式" />
-          <div className="space-y-2.5">
-            {[
-              "对话补全与角色扮演",
-              "口语 ↔ 正式表达的句子改写",
-              "多句与段落级翻译",
-              "同一词语在不同情境中的用法比较",
-            ].map((item) => (
-              <div key={item} className="flex items-center gap-2.5">
-                <CheckCircleIcon className="h-4 w-4 shrink-0 text-moss/70" />
-                <span className="text-[0.76rem] text-ink-soft">{item}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-        <section className="flex flex-col justify-between rounded-[1.75rem] border border-moss/20 bg-moss p-5 text-paper-light sm:p-6">
-          <div>
-            <SparkIcon className="h-5 w-5 text-gold" />
-            <p className="mt-3 font-display text-[1.25rem] leading-snug">
-              情境不是为了背“标准对话”，而是训练你在真实互动中做选择。
-            </p>
-          </div>
-          <div className="mt-4 flex items-center gap-4 text-[0.64rem] text-paper-light/60">
-            <span>{SCENARIOS.length} 个情境</span>
-            <span className="h-0.5 w-0.5 rounded-full bg-paper-light/40" />
-            <span>日常与学术并行</span>
-            <span className="h-0.5 w-0.5 rounded-full bg-paper-light/40" />
-            <span>三语言自由切换</span>
-          </div>
-        </section>
-      </div>
     </div>
   );
 }

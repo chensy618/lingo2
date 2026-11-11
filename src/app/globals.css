@@ -58,11 +58,11 @@ body {
 
 @layer components {
   .surface {
-    @apply rounded-[1.75rem] border border-line bg-paper-light/85 shadow-[0_1px_0_rgba(255,255,255,0.8)_inset,0_18px_44px_-32px_rgba(31,42,38,0.45)] backdrop-blur-sm;
+    @apply rounded-3xl border border-line bg-paper-light/80;
   }
 
   .surface-flat {
-    @apply rounded-3xl border border-line bg-paper-light/70;
+    @apply rounded-2xl border border-line bg-paper-light/60;
   }
 
   .eyebrow {

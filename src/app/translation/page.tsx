@@ -11,7 +11,7 @@ import {
   usePreferences,
 } from "@/lib/storage";
 import type { Exercise, Lang, Level, SelfRating, Track } from "@/lib/types";
-import { LANGUAGES, LANG_CODES, LEVELS, LEVEL_LABELS, TRACKS } from "@/lib/types";
+import { LANGUAGES, LANG_CODES, LEVELS, TRACKS } from "@/lib/types";
 import {
   buildSession,
   cn,
@@ -28,11 +28,9 @@ import {
   CloseIcon,
   PenIcon,
   RotateIcon,
-  SparkIcon,
-  TargetIcon,
   TranslateIcon,
 } from "@/components/icons";
-import { InfoNote, LangBadge, LevelPill, PageHeader, ProgressBar, TrackPill } from "@/components/ui";
+import { InfoNote, LangBadge, PageHeader, ProgressBar } from "@/components/ui";
 
 const PLACEHOLDERS: Record<Lang, string> = {
   en: "Write your translation here ...",
@@ -328,178 +326,117 @@ function TranslationClient() {
     return (
       <div className="animate-fade">
         <PageHeader
-          eyebrow="Translation practice"
           title="翻译练习"
-          description="选择目标语言、提示语言、等级与语域。作答前只显示提示语言，提交后展示三语言对照与解析。"
-          action={
-            <Link href="/progress" className="btn-ghost text-[0.78rem]">
-              查看练习记录
-              <ArrowRightIcon className="h-3.5 w-3.5" />
-            </Link>
-          }
+          description="选择目标语言、提示语言、等级与语域。提交后查看三语言对照与解析。"
         />
 
         <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
           <div className="space-y-5">
-            <section className="surface p-5 sm:p-6">
-              <div className="flex items-baseline justify-between gap-3">
-                <div>
-                  <p className="eyebrow">01 · Target</p>
-                  <h2 className="mt-1 font-display text-xl text-ink">你要用哪种语言输出？</h2>
+            <section className="surface space-y-5 p-5 sm:p-6">
+              <div>
+                <p className="label">目标语言</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {LANG_CODES.map((lang) => {
+                    const meta = LANGUAGES[lang];
+                    const active = config.target === lang;
+                    return (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => updateTarget(lang)}
+                        className={cn(
+                          "flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition",
+                          active
+                            ? "border-moss bg-moss text-paper-light"
+                            : "border-line bg-white/50 hover:border-moss/35",
+                        )}
+                      >
+                        <LangBadge lang={lang} size="sm" />
+                        <span className="text-[0.78rem] font-semibold">{meta.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
-                <span className="hidden text-[0.68rem] text-ink-faint sm:block">目标语言</span>
               </div>
-              <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
-                {LANG_CODES.map((lang) => {
-                  const meta = LANGUAGES[lang];
-                  const active = config.target === lang;
-                  return (
-                    <button
-                      key={lang}
-                      type="button"
-                      onClick={() => updateTarget(lang)}
-                      className={cn(
-                        "group relative overflow-hidden rounded-2xl border p-4 text-left transition-all duration-200",
-                        active
-                          ? "border-moss bg-moss text-paper-light shadow-[0_14px_30px_-22px_rgba(47,93,80,0.9)]"
-                          : "border-line-strong bg-white/55 hover:-translate-y-0.5 hover:border-moss/40 hover:bg-white",
-                      )}
-                    >
-                      <div className="flex items-center justify-between">
-                        <LangBadge lang={lang} size="lg" />
-                        <span
-                          className={cn(
-                            "flex h-5 w-5 items-center justify-center rounded-full border",
-                            active ? "border-paper-light/50 bg-paper-light/15" : "border-line-strong group-hover:border-moss/40",
-                          )}
-                        >
-                          {active && <span className="h-1.5 w-1.5 rounded-full bg-paper-light" />}
-                        </span>
-                      </div>
-                      <p className={cn("mt-3 font-display text-[1.15rem] leading-none", active ? "text-paper-light" : "text-ink")}>
-                        {meta.label}
-                      </p>
-                      <p className={cn("mt-1 text-[0.66rem]", active ? "text-paper-light/65" : "text-ink-faint")}>
-                        {meta.native}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
 
-            <section className="surface p-5 sm:p-6">
-              <div className="flex items-baseline justify-between gap-3">
-                <div>
-                  <p className="eyebrow">02 · Prompt</p>
-                  <h2 className="mt-1 font-display text-xl text-ink">题目用哪种语言？</h2>
+              <div>
+                <p className="label">提示语言</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {LANG_CODES.filter((lang) => lang !== config.target).map((lang) => {
+                    const meta = LANGUAGES[lang];
+                    const active = config.source === lang;
+                    return (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => setConfig((prev) => ({ ...prev, source: lang }))}
+                        className={cn(
+                          "flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition",
+                          active
+                            ? "border-moss bg-moss-soft/55"
+                            : "border-line bg-white/50 hover:border-moss/35",
+                        )}
+                      >
+                        <LangBadge lang={lang} size="sm" />
+                        <span className="text-[0.78rem] font-semibold text-ink">{meta.label}</span>
+                        {active && <CheckCircleIcon className="ml-auto h-3.5 w-3.5 text-moss" />}
+                      </button>
+                    );
+                  })}
                 </div>
-                <span className="hidden text-[0.68rem] text-ink-faint sm:block">提示语言</span>
-              </div>
-              <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-                {LANG_CODES.filter((lang) => lang !== config.target).map((lang) => {
-                  const meta = LANGUAGES[lang];
-                  const active = config.source === lang;
-                  return (
-                    <button
-                      key={lang}
-                      type="button"
-                      onClick={() => setConfig((prev) => ({ ...prev, source: lang }))}
-                      className={cn(
-                        "flex items-center gap-3 rounded-2xl border px-4 py-3 text-left transition",
-                        active
-                          ? "border-moss bg-moss-soft/55"
-                          : "border-line-strong bg-white/50 hover:border-moss/35 hover:bg-white",
-                      )}
-                    >
-                      <LangBadge lang={lang} />
-                      <span className="flex-1">
-                        <span className="block text-[0.85rem] font-semibold text-ink">{meta.label}</span>
-                        <span className="block text-[0.64rem] text-ink-faint">
-                          {active ? "当前题目语言" : `用${meta.zhLabel}出题`}
-                        </span>
-                      </span>
-                      {active && <CheckCircleIcon className="h-4 w-4 text-moss" />}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="mt-3 text-[0.68rem] leading-relaxed text-ink-faint">
-                第三种语言（{LANGUAGES[thirdLang].zhLabel}）会在提交后出现，避免提前泄露参考答案。
-              </p>
-            </section>
-
-            <section className="surface p-5 sm:p-6">
-              <p className="eyebrow">03 · Level</p>
-              <div className="mt-1 flex items-baseline justify-between gap-3">
-                <h2 className="font-display text-xl text-ink">选择{targetMeta.zhLabel}的等级</h2>
-                <span className="text-[0.68rem] text-ink-faint">{targetMeta.label} · CEFR</span>
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
-                {LEVELS.map((level) => {
-                  const active = config.level === level;
-                  return (
-                    <button
-                      key={level}
-                      type="button"
-                      onClick={() => setConfig((prev) => ({ ...prev, level }))}
-                      className={cn(
-                        "rounded-xl border px-2 py-2.5 text-center transition",
-                        active
-                          ? "border-moss bg-moss text-paper-light"
-                          : "border-line-strong bg-white/50 text-ink-soft hover:border-moss/35 hover:bg-white",
-                      )}
-                    >
-                      <span className="block text-[0.8rem] font-bold">{level}</span>
-                      <span className={cn("mt-0.5 block text-[0.58rem]", active ? "text-paper-light/65" : "text-ink-faint")}>
-                        {LEVEL_LABELS[level]}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="mt-3 text-[0.68rem] leading-relaxed text-ink-faint">
-                等级按目标语言单独标记。同一句话对不同语言的学习者可能属于不同难度。
-              </p>
-            </section>
-
-            <section className="surface p-5 sm:p-6">
-              <p className="eyebrow">04 · Register</p>
-              <h2 className="mt-1 font-display text-xl text-ink">选择学习场景</h2>
-              <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
-                {(Object.keys(TRACKS) as Track[]).map((track) => {
-                  const meta = TRACKS[track];
-                  const active = config.track === track;
-                  return (
-                    <button
-                      key={track}
-                      type="button"
-                      onClick={() => updateTrack(track)}
-                      className={cn(
-                        "rounded-2xl border px-4 py-3 text-left transition",
-                        active
-                          ? "border-moss bg-moss-soft/55"
-                          : "border-line-strong bg-white/50 hover:border-moss/35 hover:bg-white",
-                      )}
-                    >
-                      <span className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            "h-1.5 w-1.5 rounded-full",
-                            track === "everyday" ? "bg-moss" : track === "academic" ? "bg-coral" : "bg-gold",
-                          )}
-                        />
-                        <span className="text-[0.82rem] font-semibold text-ink">{meta.label}</span>
-                      </span>
-                      <span className="mt-1 block text-[0.64rem] leading-relaxed text-ink-faint">{meta.description}</span>
-                    </button>
-                  );
-                })}
               </div>
 
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="border-t border-line pt-5">
+                <p className="label">等级</p>
+                <div className="grid grid-cols-6 gap-1.5">
+                  {LEVELS.map((level) => {
+                    const active = config.level === level;
+                    return (
+                      <button
+                        key={level}
+                        type="button"
+                        onClick={() => setConfig((prev) => ({ ...prev, level }))}
+                        className={cn(
+                          "rounded-lg border py-2 text-[0.72rem] font-semibold transition",
+                          active
+                            ? "border-moss bg-moss text-paper-light"
+                            : "border-line bg-white/50 text-ink-soft hover:border-moss/35",
+                        )}
+                      >
+                        {level}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <p className="label">场景</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {(Object.keys(TRACKS) as Track[]).map((track) => {
+                    const active = config.track === track;
+                    return (
+                      <button
+                        key={track}
+                        type="button"
+                        onClick={() => updateTrack(track)}
+                        className={cn(
+                          "rounded-xl border px-3 py-2.5 text-[0.76rem] font-semibold transition",
+                          active
+                            ? "border-moss bg-moss-soft/55 text-ink"
+                            : "border-line bg-white/50 text-ink-soft hover:border-moss/35",
+                        )}
+                      >
+                        {TRACKS[track].label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="grid gap-3 border-t border-line pt-5 sm:grid-cols-2">
                 <label className="block">
-                  <span className="label">主题（可选）</span>
+                  <span className="label">主题</span>
                   <span className="relative block">
                     <select
                       className="field appearance-none pr-9"
@@ -544,72 +481,19 @@ function TranslationClient() {
           </div>
 
           <aside className="lg:sticky lg:top-8 lg:self-start">
-            <div className="surface overflow-hidden">
-              <div className="bg-moss px-5 py-5 text-paper-light">
-                <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-paper-light/55">
-                  Session
-                </p>
-                <p className="mt-2 font-display text-[1.6rem] leading-tight tracking-[-0.02em]">
-                  {targetMeta.label} · {config.level}
-                </p>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  <span className="rounded-full bg-paper-light/12 px-2.5 py-1 text-[0.62rem] font-medium text-paper-light/85">
-                    {TRACKS[config.track].label}
-                  </span>
-                  <span className="rounded-full bg-paper-light/12 px-2.5 py-1 text-[0.62rem] font-medium text-paper-light/85">
-                    {config.size} 题
-                  </span>
-                  <span className="rounded-full bg-paper-light/12 px-2.5 py-1 text-[0.62rem] font-medium text-paper-light/85">
-                    提示：{sourceMeta.label}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-5">
-                <div className="space-y-3 text-[0.76rem]">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-ink-faint">提示语言</span>
-                    <span className="inline-flex items-center gap-1.5 font-medium text-ink">
-                      <LangBadge lang={config.source} size="sm" />
-                      {sourceMeta.label}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-ink-faint">目标语言</span>
-                    <span className="inline-flex items-center gap-1.5 font-medium text-ink">
-                      <LangBadge lang={config.target} size="sm" />
-                      {targetMeta.label}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="text-ink-faint">第三语言</span>
-                    <span className="inline-flex items-center gap-1.5 font-medium text-ink">
-                      <LangBadge lang={thirdLang} size="sm" />
-                      提交后显示
-                    </span>
-                  </div>
-                  {config.topic && (
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-ink-faint">主题</span>
-                      <span className="font-medium text-ink">{TOPICS.find((topic) => topic.id === config.topic)?.label}</span>
-                    </div>
-                  )}
-                </div>
-
-                <button type="button" onClick={begin} className="btn-primary mt-5 w-full">
-                  <TranslateIcon className="h-4 w-4" />
-                  开始 {config.size} 题
-                </button>
-                <p className="mt-3 text-center text-[0.62rem] leading-relaxed text-ink-faint">
-                  提交后可查看三语言答案，并用自评记录掌握程度。
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 flex items-start gap-3 rounded-2xl border border-line bg-white/35 p-4">
-              <SparkIcon className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-              <p className="text-[0.68rem] leading-relaxed text-ink-faint">
-                MVP 版采用“参考译文比对 + 自评”，不把字符串完全一致当作唯一标准。翻译有多个合理表达。
+            <div className="surface p-5">
+              <p className="font-display text-[1.2rem] text-ink">
+                {targetMeta.label} · {config.level}
+              </p>
+              <p className="mt-1 text-[0.7rem] text-ink-faint">
+                {TRACKS[config.track].label} · {config.size} 题 · 提示语言 {sourceMeta.label}
+              </p>
+              <button type="button" onClick={begin} className="btn-primary mt-5 w-full">
+                <TranslateIcon className="h-4 w-4" />
+                开始 {config.size} 题
+              </button>
+              <p className="mt-3 text-[0.64rem] leading-relaxed text-ink-faint">
+                提交后可查看三语言答案与解析。
               </p>
             </div>
           </aside>
@@ -626,15 +510,11 @@ function TranslationClient() {
 
     return (
       <div className="animate-fade">
-        <PageHeader eyebrow="Session complete" title="这一轮完成了。" description="记录已经保存在本地。下一轮可以继续巩固，或换一种语言与语域。" />
+        <PageHeader title="这一轮完成了。" description="记录已保存在本地。" />
         <div className="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
           <section className="surface overflow-hidden">
-            <div className="bg-moss px-6 py-8 text-paper-light sm:px-8">
-              <div className="flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.18em] text-paper-light/55">
-                <CheckCircleIcon className="h-4 w-4" />
-                Session summary
-              </div>
-              <p className="mt-3 font-display text-[2rem] leading-tight tracking-[-0.03em]">
+            <div className="bg-moss px-6 py-7 text-paper-light sm:px-8">
+              <p className="font-display text-[1.9rem] leading-tight tracking-[-0.03em]">
                 {session.length} 题 · {targetMeta.label}
               </p>
               <p className="mt-1.5 text-[0.78rem] text-paper-light/70">
@@ -666,9 +546,7 @@ function TranslationClient() {
                         <p className="truncate text-[0.78rem] font-medium text-ink">
                           {exercise.variants[config.source][0]}
                         </p>
-                        <p className="text-[0.62rem] text-ink-faint">
-                          {exercise.levels[config.target]} · {TOPICS.find((topic) => topic.id === exercise.topic)?.label}
-                        </p>
+                        <p className="text-[0.62rem] text-ink-faint">{exercise.levels[config.target]}</p>
                       </div>
                       <span
                         className={cn(
@@ -709,14 +587,6 @@ function TranslationClient() {
                 </Link>
               </div>
             </div>
-            <div className="rounded-3xl border border-line bg-white/35 p-5">
-              <div className="flex items-start gap-3">
-                <TargetIcon className="mt-0.5 h-4 w-4 shrink-0 text-moss" />
-                <p className="text-[0.72rem] leading-relaxed text-ink-soft">
-                  如果本轮有题目标记为“需要重练”，它们会出现在首页和学习记录的复习队列中。复习时先尝试回忆，再揭示答案。
-                </p>
-              </div>
-            </div>
           </section>
         </div>
       </div>
@@ -738,14 +608,9 @@ function TranslationClient() {
           <CloseIcon className="h-3.5 w-3.5" />
           调整设置
         </button>
-        <div className="flex items-center gap-2 text-[0.68rem] text-ink-faint">
-          <TrackPill track={current.track} />
-          <LevelPill level={current.levels[config.target]} muted />
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper-light px-2.5 py-1">
-            <LangBadge lang={config.target} size="sm" />
-            {targetMeta.label}
-          </span>
-        </div>
+        <p className="text-[0.7rem] text-ink-faint">
+          {targetMeta.label} · {current.levels[config.target]} · {TRACKS[current.track].label}
+        </p>
       </div>
 
       <div className="mb-6">
@@ -773,12 +638,9 @@ function TranslationClient() {
       <div className="grid gap-5 lg:grid-cols-[1.35fr_1fr]">
         <section className="space-y-4">
           <div className="surface p-6 sm:p-7">
-            <div className="flex items-center justify-between gap-3">
-              <p className="eyebrow">Translate into {targetMeta.label}</p>
-              <div className="flex items-center gap-2">
-                <LangBadge lang={config.source} size="sm" />
-                <span className="text-[0.65rem] text-ink-faint">题目语言</span>
-              </div>
+            <div className="flex items-center gap-2 text-[0.7rem] text-ink-faint">
+              <LangBadge lang={config.source} size="sm" />
+              译为 {targetMeta.zhLabel}
             </div>
 
             <p className="mt-5 font-display text-[1.55rem] leading-[1.35] tracking-[-0.02em] text-ink sm:text-[1.85rem]">
@@ -789,23 +651,12 @@ function TranslationClient() {
               <p className="mt-3 text-[0.76rem] leading-relaxed text-ink-faint">{current.context[config.source]}</p>
             )}
 
-            <div className="mt-5 flex flex-wrap gap-1.5">
-              <span className="chip">{TOPICS.find((topic) => topic.id === current.topic)?.label}</span>
-              {current.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="chip">
-                  {tag}
-                </span>
-              ))}
-            </div>
           </div>
 
           <div className="surface p-5 sm:p-6">
-            <div className="flex items-center justify-between">
-              <p className="text-[0.78rem] font-semibold text-ink">
-                你的{targetMeta.zhLabel}译文
-              </p>
-              <span className="text-[0.62rem] text-ink-faint">{answer.trim().length} 字符</span>
-            </div>
+            <p className="text-[0.78rem] font-semibold text-ink">
+              你的{targetMeta.zhLabel}译文
+            </p>
             <textarea
               value={answer}
               onChange={(event) => setAnswer(event.target.value)}
@@ -954,13 +805,10 @@ function TranslationClient() {
 
         <aside className="space-y-4 lg:sticky lg:top-8 lg:self-start">
           <div className="surface p-5">
-            <p className="eyebrow">Self assessment</p>
-            <h3 className="mt-1 font-display text-lg text-ink">
-              {submitted ? "你觉得自己掌握了吗？" : "先完成译文"}
+            <h3 className="font-display text-lg text-ink">
+              {submitted ? "掌握程度" : "先完成译文"}
             </h3>
-            <p className="mt-1 text-[0.7rem] leading-relaxed text-ink-faint">
-              自评会决定这道题是否进入复习队列。诚实比“全对”更有用。
-            </p>
+            <p className="mt-1 text-[0.68rem] text-ink-faint">自评决定这道题是否进入复习。</p>
             <div className="mt-4 space-y-2">
               {(Object.keys(RATING_META) as SelfRating[]).map((key) => {
                 const meta = RATING_META[key];
@@ -991,54 +839,6 @@ function TranslationClient() {
             )}
           </div>
 
-          <div className="surface-flat p-5">
-            <p className="eyebrow">This session</p>
-            <div className="mt-3 space-y-3 text-[0.74rem]">
-              <div className="flex items-center justify-between">
-                <span className="text-ink-faint">目标语言</span>
-                <span className="inline-flex items-center gap-1.5 font-medium text-ink">
-                  <LangBadge lang={config.target} size="sm" />
-                  {targetMeta.label}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-ink-faint">提示语言</span>
-                <span className="inline-flex items-center gap-1.5 font-medium text-ink">
-                  <LangBadge lang={config.source} size="sm" />
-                  {sourceMeta.label}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-ink-faint">等级 / 语域</span>
-                <span className="font-medium text-ink">
-                  {current.levels[config.target]} · {TRACKS[current.track].label}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-ink-faint">本轮进度</span>
-                <span className="font-medium text-ink">
-                  {currentIndex}/{session.length}
-                </span>
-              </div>
-            </div>
-            <div className="mt-4 flex gap-2">
-              <button type="button" onClick={toggleBookmark} className="btn-secondary flex-1 text-[0.72rem]">
-                <BookmarkIcon className="h-3.5 w-3.5" filled={isBookmarked} />
-                {isBookmarked ? "已收藏" : "收藏"}
-              </button>
-              <button type="button" onClick={skip} className="btn-ghost flex-1 text-[0.72rem]">
-                跳过
-                <ArrowRightIcon className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-line bg-white/35 p-4">
-            <p className="text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ink-faint">Tip</p>
-            <p className="mt-1.5 text-[0.7rem] leading-relaxed text-ink-soft">
-              先用{sourceMeta.label}确认句子的意图，再想{targetMeta.label}会怎么说，而不是逐词替换。
-            </p>
-          </div>
         </aside>
       </div>
     </div>
