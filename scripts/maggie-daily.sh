@@ -52,7 +52,7 @@ node scripts/generate-content.mjs \
 
 if [ "${AUTO_REVIEW:-1}" != "0" ]; then
   log "Auto-reviewing with Maggie"
-  node scripts/review-content.mjs --file src/content/generated-exercises.json
+  node scripts/review-content.mjs --file=src/content/generated-exercises.json
 fi
 
 node scripts/validate-content.mjs
