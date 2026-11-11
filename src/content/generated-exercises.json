@@ -1,1 +1,57 @@
-[]
+[
+  {
+    "id": "ai_20261111_everyday_01_0f3d92",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "society",
+    "levels": {
+      "en": "B1",
+      "no": "B1",
+      "zh": "B1"
+    },
+    "variants": {
+      "en": [
+        "In my neighbourhood, people are trying to make the streets safer for children.",
+        "People in my neighbourhood are trying to make the streets safer for children."
+      ],
+      "no": [
+        "I nabolaget mitt prøver folk å gjøre gatene tryggere for barna.",
+        "Folk i nabolaget mitt prøver å gjøre gatene tryggere for barna."
+      ],
+      "zh": [
+        "在我住的社区，大家正努力让街道对孩子们更安全。",
+        "我们社区的人正在努力让街道对孩子们更安全。"
+      ]
+    },
+    "tags": [
+      "society",
+      "community_safety",
+      "present_progressive",
+      "comparatives"
+    ],
+    "notes": [
+      {
+        "term": "neighbourhood",
+        "text": "英式拼写，意为“社区、街区”；美式拼写为 neighborhood，同一练习中应保持拼写一致。"
+      },
+      {
+        "term": "prøver å gjøre",
+        "text": "挪威语“试图做……”；prøver 后接 å + 不定式，gjøre 后接宾语和形容词补足语。"
+      },
+      {
+        "term": "tryggere",
+        "text": "trygg 的比较级，表示“更安全”；for barna 表示“对孩子们来说”。"
+      },
+      {
+        "term": "正努力",
+        "text": "汉语“正在努力”，用“正/正在”表达进行中的动作，语气自然，适合日常交流。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-11T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "pending"
+    }
+  }
+]
