@@ -26,9 +26,9 @@ gh auth status >/dev/null 2>&1 || { log "gh is not authenticated"; exit 1; }
 gh auth setup-git >/dev/null 2>&1 || true
 
 DATE="$(date +%F)"
-OPEN_PR="$(gh pr list --repo "$REPO" --state open --search "Content review: $DATE" --json number --jq '.[0].number // empty')"
-if [ -n "$OPEN_PR" ] && [ "${FORCE:-0}" != "1" ]; then
-  log "Open review PR #$OPEN_PR already exists for $DATE; skipping."
+EXISTING_PR="$(gh pr list --repo "$REPO" --state all --search "Content review: $DATE" --json number,state --jq '.[0].number // empty')"
+if [ -n "$EXISTING_PR" ] && [ "${FORCE:-0}" != "1" ]; then
+  log "Review PR #$EXISTING_PR already exists for $DATE; skipping."
   exit 0
 fi
 
@@ -50,6 +50,11 @@ node scripts/generate-content.mjs \
   --level="${CONTENT_LEVEL:-auto}" \
   --track="${CONTENT_TRACK:-mixed}"
 
+if [ "${AUTO_REVIEW:-1}" != "0" ]; then
+  log "Auto-reviewing with Maggie"
+  node scripts/review-content.mjs --file src/content/generated-exercises.json
+fi
+
 node scripts/validate-content.mjs
 
 if git diff --quiet -- src/content/generated-exercises.json; then
@@ -66,7 +71,7 @@ PUSH_URL="https://github.com/${REPO}.git"
 git push "$PUSH_URL" "$BRANCH" >/dev/null
 log "Pushed branch $BRANCH"
 
-gh pr create \
+PR_URL="$(gh pr create \
   --repo "$REPO" \
   --head "$BRANCH" \
   --base main \
@@ -76,11 +81,17 @@ gh pr create \
 
 生成日期：$DATE
 
-本 PR 只包含 \`pending\` 候选，未审核内容不会出现在网站上。请按 [内容审核标准](https://github.com/$REPO/blob/main/docs/CONTENT_REVIEW.md) 逐条审核，并直接修改 \`src/content/generated-exercises.json\`：
+本 PR 由本机任务自动生成并预审。评分 ≥15/16、八项 checklist 全通过且技术校验通过时自动合并；否则保留给人工审核。审核标准见 [docs/CONTENT_REVIEW.md](https://github.com/$REPO/blob/main/docs/CONTENT_REVIEW.md)。")"
+log "Created review PR: $PR_URL"
 
-- [ ] 检查三语言语义、自然度与等级
-- [ ] 检查语域、语法、解析与原创性
-- [ ] 为 \`approved\` 条目填写 reviewer、reviewedAt、score、checklist
-- [ ] 校验通过后合并发布" >/dev/null
+TODAY_APPROVED="$(DATE="$DATE" node -e 'const fs=require("fs");const p=process.argv[1];const a=JSON.parse(fs.readFileSync(p,"utf8"));const t=a.filter((x)=>(x.generatedAt||"").slice(0,10)===process.env.DATE);console.log(t.length>0 && t.every((x)=>x.review?.status==="approved")?"1":"0")' "$PWD/src/content/generated-exercises.json")"
 
-log "Created review PR for $BRANCH"
+if [ "$TODAY_APPROVED" = "1" ] && [ "${AUTO_MERGE:-1}" != "0" ]; then
+  if gh pr merge "$PR_URL" --squash --delete-branch >/dev/null 2>&1; then
+    log "Auto-approved content merged and deployment triggered."
+  else
+    log "Content passed auto review but merge failed; PR left open for manual merge."
+  fi
+else
+  log "Content left open for human review."
+fi

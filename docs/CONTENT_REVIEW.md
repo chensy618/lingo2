@@ -7,11 +7,14 @@
 
 ## 1. 流程
 
-1. **每日生成**：`generate-content.yml` 定时调用 AI，把候选追加到 `src/content/generated-exercises.json`，状态为 `pending`，并创建 PR。
-2. **人工审核**：审核者在 PR 中逐条检查三语言内容，按下方标准填写 `review` 字段。
-3. **批准**：只有 `status: "approved"` 的条目会进入网站；其余状态不会显示。
-4. **合并发布**：PR 合并后，GitHub Actions 自动构建并部署。
-5. **校验**：`npm run content:validate` 会检查 schema、重复、等级、标签与审核完整性；构建前也会自动执行。
+1. **每日生成**：本机 `launchd` 任务调用 Maggie，把候选追加到 `src/content/generated-exercises.json`，并创建 PR。
+2. **自动预审**：对新候选执行第二次 Maggie 审核，按下方 16 分制打分并填写 checklist。
+3. **自动确认**：若每条当日候选都满足 **score ≥ 15/16、八项 checklist 全为 true、无 issues、技术校验通过**，自动标记 `approved` 并合并 PR。
+4. **人工兜底**：未达到自动确认门槛的候选保留 `pending` / `needs_changes`，由人工在 PR 中处理。
+5. **发布**：PR 合并后自动部署；只有 `status: "approved"` 的条目会进入网站。
+6. **校验**：`npm run content:validate` 检查 schema、重复、等级、标签与审核完整性；构建前也会自动执行。
+
+自动审核由同一 Maggie 模型完成，不等同于独立人工复核。建议定期抽查已自动合并的内容；需要更严格时可以关闭自动合并。
 
 ## 2. 审核状态
 
@@ -98,7 +101,13 @@ GitHub 托管运行器无法解析 Maggie 的 UiT 接口，因此当前使用本
 - 安装：`MAGGIE_API_KEY='...' ./scripts/install-maggie-schedule.sh`
 - 手动测试：`launchctl kickstart -k gui/$(id -u)/com.uit.lingo2.content`
 
-脚本会自动创建 `content/maggie-日期-时间` 分支和审核 PR；如果当天已有 open PR，则跳过。
+脚本会自动创建 `content/maggie-日期-时间` 分支和审核 PR。若当天已有 PR 则跳过。
+
+自动确认开关（可写在 `~/.config/lingo2/maggie.env`）：
+
+- `AUTO_REVIEW=0`：关闭自动预审
+- `AUTO_MERGE=0`：保留自动预审结果，但 PR 必须人工合并
+- `AUTO_APPROVE_MIN_SCORE=15`：调整自动确认分数阈值
 
 ### GitHub Actions（可选）
 

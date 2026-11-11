@@ -75,7 +75,7 @@ npm run lint
 
 ## 内容更新与审核
 
-题库不是实时生成的。Maggie 只负责生成候选，人工审核通过后才会进入网站。
+题库不是实时生成的。Maggie 先生成候选，经过自动预审或人工审核后才会进入网站。
 
 ### 每日本机生成（当前配置）
 
@@ -86,17 +86,18 @@ Maggie 的 UiT 接口只能从校园网络访问，GitHub 托管运行器无法�
    MAGGIE_API_KEY='...' ./scripts/install-maggie-schedule.sh
    ```
 2. 密钥保存在 `~/.config/lingo2/maggie.env`（权限 600），不进入仓库。
-3. 任务每天生成 `pending` 候选、创建 `content-review` PR，并跳过当天已有 PR 的情况。
+3. 任务每天生成候选，自动用 Maggie 预审并创建 `content-review` PR；若评分 ≥15/16、八项 checklist 全通过且无 issues，则自动合并发布；否则保留人工审核。
 4. 日志：`~/Library/Logs/lingo2-content.log`
 5. 手动运行：
    ```bash
    ./scripts/maggie-daily.sh
    launchctl kickstart -k gui/$(id -u)/com.uit.lingo2.content
    ```
+6. 可用环境变量控制：`AUTO_REVIEW=0`（关闭预审）、`AUTO_MERGE=0`（只预审不自动合并）、`AUTO_APPROVE_MIN_SCORE=15`。
 
 ### 审核与发布
 
-审核者按 [`docs/CONTENT_REVIEW.md`](docs/CONTENT_REVIEW.md) 的 16 分制标准逐条检查，直接修改 PR 中的 `review` 字段。只有 `review.status === "approved"` 的条目会被前端加载；合并 PR 后自动部署。构建前自动运行 `npm run content:validate`。
+审核者按 [`docs/CONTENT_REVIEW.md`](docs/CONTENT_REVIEW.md) 的 16 分制标准逐条检查，可直接修改 PR 中的 `review` 字段。只有 `review.status === "approved"` 的条目会被前端加载；达到自动确认门槛的 PR 会自动合并，其余保留人工审核。构建前自动运行 `npm run content:validate`。
 
 审核标准包括语义对齐、自然度、等级匹配、语域、语法、解析准确性、原创与安全、技术规范；八项必须全过且总分至少 14/16。
 
