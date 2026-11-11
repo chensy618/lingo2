@@ -73,6 +73,26 @@ npm run lint
 
 可使用 Supabase Edge Function、Cloudflare Worker 或自建 API 实现。未配置时仍可使用本地导出 / 导入。
 
+## 内容更新与审核
+
+题库不是实时生成的。AI 只负责生成候选，人工审核通过后才会进入网站：
+
+1. 在 **Settings → Actions → General** 允许 GitHub Actions 创建 Pull Request。
+2. 配置仓库变量 `ENABLE_AI_CONTENT=true`，并添加 Secrets：`AI_API_KEY`，可选 `AI_API_URL`、`AI_MODEL`、`AI_TEMPERATURE`。
+3. 每天 05:10 UTC，`Generate content candidates` 调用 AI，把 `pending` 候选写入 `src/content/generated-exercises.json`，并创建 PR。
+4. 审核者按 [`docs/CONTENT_REVIEW.md`](docs/CONTENT_REVIEW.md) 的 16 分制标准逐条检查，直接修改 PR 中的 `review` 字段。
+5. 只有 `review.status === "approved"` 的条目会被前端加载；合并 PR 后自动部署。
+6. 构建前自动运行 `npm run content:validate`，检查 schema、ID、重复、标签与审核完整性。
+
+也可以手动触发 workflow，或用 fixture 在本地测试：
+
+```bash
+npm run content:generate -- --fixture --count=2 --level=A1 --track=everyday --output=/tmp/candidates.json
+npm run content:validate -- /tmp/candidates.json
+```
+
+审核标准包括语义对齐、自然度、等级匹配、语域、语法、解析准确性、原创与安全、技术规范；八项必须全过且总分至少 14/16。
+
 ## 技术栈
 
 - Next.js 16（App Router，静态导出）

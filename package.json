@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "preview": "npx serve out"
+    "preview": "npx serve out",
+    "prebuild": "node scripts/validate-content.mjs",
+    "content:generate": "node scripts/generate-content.mjs",
+    "content:validate": "node scripts/validate-content.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

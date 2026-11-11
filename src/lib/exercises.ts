@@ -1,6 +1,7 @@
 import type { Exercise } from "./types";
+import generatedExercises from "@/content/generated-exercises.json";
 
-export const EXERCISES: Exercise[] = [
+const SEED_EXERCISES: Exercise[] = [
   {
     id: "tr_a1_0001",
     type: "sentence_translation",
@@ -821,5 +822,11 @@ export const EXERCISES: Exercise[] = [
     ],
   },
 ];
+
+const APPROVED_GENERATED = (generatedExercises as unknown as Exercise[]).filter(
+  (exercise) => exercise.review?.status === "approved",
+);
+
+export const EXERCISES: Exercise[] = [...SEED_EXERCISES, ...APPROVED_GENERATED];
 
 export const EXERCISE_MAP = Object.fromEntries(EXERCISES.map((exercise) => [exercise.id, exercise]));

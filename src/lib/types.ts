@@ -94,6 +94,28 @@ export interface ExerciseNote {
   text: string;
 }
 
+export type ContentStatus = "pending" | "approved" | "needs_changes" | "rejected";
+
+export interface ContentReviewChecklist {
+  semanticAlignment: boolean;
+  naturalness: boolean;
+  levelFit: boolean;
+  registerFit: boolean;
+  grammar: boolean;
+  notesAccuracy: boolean;
+  originality: boolean;
+  technical: boolean;
+}
+
+export interface ContentReview {
+  status: ContentStatus;
+  reviewer?: string;
+  reviewedAt?: string;
+  score?: number;
+  checklist?: ContentReviewChecklist;
+  notes?: string;
+}
+
 export interface Exercise {
   id: string;
   type: "sentence_translation";
@@ -104,6 +126,10 @@ export interface Exercise {
   tags: string[];
   notes: ExerciseNote[];
   context?: Partial<Record<Lang, string>>;
+  origin?: "seed" | "ai";
+  generatedAt?: string;
+  model?: string;
+  review?: ContentReview;
 }
 
 export interface VocabularyEntry {

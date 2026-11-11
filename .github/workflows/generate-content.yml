@@ -1,0 +1,92 @@
+name: Generate content candidates
+
+on:
+  schedule:
+    - cron: "10 5 * * *"
+  workflow_dispatch:
+    inputs:
+      count:
+        description: Number of candidates
+        default: "6"
+      level:
+        description: CEFR level
+        type: choice
+        options: [auto, A1, A2, B1, B2, C1, C2]
+        default: auto
+      track:
+        description: Track
+        type: choice
+        options: [mixed, everyday, academic]
+        default: mixed
+      fixture:
+        description: Generate local fixture content without calling AI
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  generate:
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.ENABLE_AI_CONTENT == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Generate candidates
+        env:
+          AI_API_URL: ${{ secrets.AI_API_URL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          AI_TEMPERATURE: ${{ secrets.AI_TEMPERATURE }}
+          CONTENT_COUNT: ${{ github.event.inputs.count || '6' }}
+          CONTENT_LEVEL: ${{ github.event.inputs.level || 'auto' }}
+          CONTENT_TRACK: ${{ github.event.inputs.track || 'mixed' }}
+          CONTENT_FIXTURE: ${{ github.event.inputs.fixture || 'false' }}
+        run: |
+          ARGS="--count=$CONTENT_COUNT --level=$CONTENT_LEVEL --track=$CONTENT_TRACK"
+          if [ "$CONTENT_FIXTURE" = "true" ]; then ARGS="$ARGS --fixture"; fi
+          node scripts/generate-content.mjs $ARGS
+
+      - name: Validate candidates
+        run: node scripts/validate-content.mjs
+
+      - name: Prepare pull request metadata
+        id: meta
+        run: echo "date=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure review label exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh label create content-review --color FBCA04 --description "Needs content review" || true
+
+      - name: Open review PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Add AI content candidates for ${{ steps.meta.outputs.date }}"
+          branch: content/auto-${{ github.run_number }}
+          delete-branch: true
+          title: "Content review: ${{ steps.meta.outputs.date }}"
+          labels: content-review
+          body: |
+            ## AI 内容候选
+
+            生成日期：${{ steps.meta.outputs.date }}
+
+            本 PR 只包含 `pending` 候选，**未审核内容不会出现在网站上**。请按 [内容审核标准](../blob/main/docs/CONTENT_REVIEW.md) 逐条审核，并直接在本 PR 中修改 `src/content/generated-exercises.json`：
+
+            - [ ] 阅读审核标准
+            - [ ] 检查三语言语义、自然度与等级
+            - [ ] 检查语域、语法、解析与原创性
+            - [ ] 为 `approved` 条目填写 reviewer、reviewedAt、score、checklist
+            - [ ] 将不采用的条目标记为 `needs_changes` 或 `rejected` 并写明原因
+            - [ ] 合并前确认 `npm run content:validate` 通过
+
+            > 红线：未审核的 AI 输出不得直接上线。
