@@ -15,13 +15,13 @@ export const STORAGE_KEYS = {
 export const DEFAULT_PREFERENCES: Preferences = {
   target: "no",
   source: "zh",
-  level: "B1",
+  level: "A1",
   track: "everyday",
   sessionSize: 10,
   dailyGoal: 10,
   showThird: true,
   uiLanguage: "zh",
-  profileLevels: { en: "B2", no: "B1", zh: "C2" },
+  profileLevels: { en: "B2", no: "A1", zh: "C2" },
 };
 
 export interface LastSession {
