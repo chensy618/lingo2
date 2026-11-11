@@ -55,6 +55,7 @@ export interface SessionOptions {
   level: Level;
   track: Track;
   topic?: string;
+  ids?: string[];
   size: number;
 }
 
@@ -66,6 +67,21 @@ export interface SessionResult {
 }
 
 export function buildSession(options: SessionOptions): SessionResult {
+  if (options.ids?.length) {
+    const chosen = options.ids
+      .map((id) => EXERCISES.find((exercise) => exercise.id === id))
+      .filter((exercise): exercise is Exercise => Boolean(exercise))
+      .slice(0, options.size);
+    if (chosen.length) {
+      return {
+        exercises: chosen,
+        exactCount: chosen.length,
+        usedNeighbourLevels: [],
+        usedOtherTopics: false,
+      };
+    }
+  }
+
   const candidates = EXERCISES.filter(
     (exercise) => options.track === "mixed" || exercise.track === options.track,
   );
@@ -199,6 +215,105 @@ export function similarity(answer: string, references: string[], lang: Lang) {
   return references.reduce((best, reference) => Math.max(best, tokenScore(answer, reference, lang)), 0);
 }
 
+export interface AnswerAnalysis {
+  coverage: number;
+  missing: string[];
+  extra: string[];
+  bestReference: string;
+}
+
+function tokensFor(text: string, lang: Lang) {
+  const normalized = normalize(text, lang);
+  if (lang === "zh" || CJK.test(normalized)) return Array.from(normalized);
+  return normalized.split(" ").filter(Boolean);
+}
+
+function lcsParts(reference: string[], answer: string[]) {
+  const rows = reference.length + 1;
+  const cols = answer.length + 1;
+  const table: number[][] = Array.from({ length: rows }, () => new Array<number>(cols).fill(0));
+  for (let i = 1; i < rows; i += 1) {
+    for (let j = 1; j < cols; j += 1) {
+      table[i][j] =
+        reference[i - 1] === answer[j - 1]
+          ? table[i - 1][j - 1] + 1
+          : Math.max(table[i - 1][j], table[i][j - 1]);
+    }
+  }
+
+  const missing: string[] = [];
+  const extra: string[] = [];
+  let matched = 0;
+  let i = reference.length;
+  let j = answer.length;
+  while (i > 0 && j > 0) {
+    if (reference[i - 1] === answer[j - 1]) {
+      matched += 1;
+      i -= 1;
+      j -= 1;
+    } else if (table[i - 1][j] >= table[i][j - 1]) {
+      missing.push(reference[i - 1]);
+      i -= 1;
+    } else {
+      extra.push(answer[j - 1]);
+      j -= 1;
+    }
+  }
+  while (i > 0) {
+    missing.push(reference[i - 1]);
+    i -= 1;
+  }
+  while (j > 0) {
+    extra.push(answer[j - 1]);
+    j -= 1;
+  }
+  return { matched, missing: missing.reverse(), extra: extra.reverse() };
+}
+
+function uniqueTokens(tokens: string[], lang: Lang) {
+  const filtered = lang === "zh" ? tokens.filter(Boolean) : tokens.filter((token) => token.length > 2);
+  const seen = new Set<string>();
+  return filtered.filter((token) => {
+    if (seen.has(token)) return false;
+    seen.add(token);
+    return true;
+  });
+}
+
+export function analyzeAnswer(answer: string, references: string[], lang: Lang): AnswerAnalysis {
+  let best: AnswerAnalysis = { coverage: 0, missing: [], extra: [], bestReference: references[0] ?? "" };
+
+  for (const reference of references) {
+    const refTokens = tokensFor(reference, lang);
+    const answerTokens = tokensFor(answer, lang);
+    if (!refTokens.length) continue;
+    const { matched, missing, extra } = lcsParts(refTokens, answerTokens);
+    const coverage = matched / refTokens.length;
+    if (coverage >= best.coverage) {
+      const missingUnique = uniqueTokens(missing, lang);
+      const extraUnique = uniqueTokens(extra, lang);
+      best = {
+        coverage,
+        missing:
+          lang === "zh"
+            ? missingUnique.length
+              ? [missingUnique.join("").slice(0, 12)]
+              : []
+            : missingUnique,
+        extra:
+          lang === "zh"
+            ? extraUnique.length
+              ? [extraUnique.join("").slice(0, 12)]
+              : []
+            : extraUnique.slice(0, 5),
+        bestReference: reference,
+      };
+    }
+  }
+
+  return best;
+}
+
 export function similarityLabel(value: number) {
   if (value >= 0.85) return { label: "非常接近", tone: "good" as const };
   if (value >= 0.65) return { label: "基本吻合", tone: "ok" as const };
@@ -236,7 +351,9 @@ export function sessionHref(options: {
   level?: Level;
   track?: Track;
   topic?: string;
+  scenario?: string;
   start?: boolean;
+  resume?: boolean;
 }) {
   const params = new URLSearchParams();
   if (options.target) params.set("target", options.target);
@@ -244,7 +361,9 @@ export function sessionHref(options: {
   if (options.level) params.set("level", options.level);
   if (options.track) params.set("track", options.track);
   if (options.topic) params.set("topic", options.topic);
+  if (options.scenario) params.set("scenario", options.scenario);
   if (options.start) params.set("start", "1");
+  if (options.resume) params.set("resume", "1");
   const query = params.toString();
   return query ? `/translation?${query}` : "/translation";
 }

@@ -21,7 +21,7 @@ const NAV = [
   { href: "/progress", label: "学习记录", icon: ChartIcon },
 ];
 
-const MOBILE_NAV = [...NAV, { href: "/settings", label: "设置", icon: SettingsIcon }];
+const MOBILE_NAV = NAV;
 
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";

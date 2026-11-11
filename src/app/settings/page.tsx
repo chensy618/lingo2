@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { LANGUAGES, LANG_CODES, LEVELS, LEVEL_LABELS, TRACKS } from "@/lib/types";
 import type { Lang, Level, Track } from "@/lib/types";
 import {
@@ -8,8 +8,10 @@ import {
   useAttempts,
   useBookmarks,
   usePreferences,
+  useSyncKey,
   useVocabState,
 } from "@/lib/storage";
+import { SYNC_URL, downloadSync, uploadSync, type SyncPayload } from "@/lib/sync";
 import { cn } from "@/lib/utils";
 import {
   CheckCircleIcon,
@@ -27,7 +29,12 @@ export default function SettingsPage() {
   const [attempts] = useAttempts();
   const [bookmarks] = useBookmarks();
   const [vocabState] = useVocabState();
+  const [syncKey, setSyncKey] = useSyncKey();
   const [saved, setSaved] = useState(false);
+  const [importError, setImportError] = useState("");
+  const [syncStatus, setSyncStatus] = useState("");
+  const [syncing, setSyncing] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const update = (patch: Partial<typeof preferences>) => {
     setPreferences((prev) => ({ ...prev, ...patch }));
@@ -35,14 +42,16 @@ export default function SettingsPage() {
     window.setTimeout(() => setSaved(false), 1600);
   };
 
+  const buildPayload = (): SyncPayload => ({
+    exportedAt: new Date().toISOString(),
+    preferences,
+    attempts,
+    bookmarks,
+    vocabulary: vocabState,
+  });
+
   const exportData = () => {
-    const payload = {
-      exportedAt: new Date().toISOString(),
-      preferences,
-      attempts,
-      bookmarks,
-      vocabulary: vocabState,
-    };
+    const payload = buildPayload();
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -50,6 +59,51 @@ export default function SettingsPage() {
     link.download = `lingo2-backup-${new Date().toISOString().slice(0, 10)}.json`;
     link.click();
     URL.revokeObjectURL(url);
+  };
+
+  const applyData = (data: SyncPayload) => {
+    if (data.preferences) window.localStorage.setItem(STORAGE_KEYS.preferences, JSON.stringify(data.preferences));
+    if (data.attempts) window.localStorage.setItem(STORAGE_KEYS.attempts, JSON.stringify(data.attempts));
+    if (data.bookmarks) window.localStorage.setItem(STORAGE_KEYS.bookmarks, JSON.stringify(data.bookmarks));
+    if (data.vocabulary) window.localStorage.setItem(STORAGE_KEYS.vocab, JSON.stringify(data.vocabulary));
+  };
+
+  const importData = async (file: File) => {
+    try {
+      const data = JSON.parse(await file.text()) as SyncPayload;
+      applyData(data);
+      window.location.reload();
+    } catch {
+      setImportError("无法读取这个备份文件，请确认它是 lingo² 导出的 JSON。");
+    }
+  };
+
+  const syncUpload = async () => {
+    if (!syncKey.trim()) return;
+    setSyncing(true);
+    setSyncStatus("");
+    try {
+      await uploadSync(syncKey.trim(), buildPayload());
+      setSyncStatus("已上传到云端");
+    } catch {
+      setSyncStatus("上传失败，请检查同步配置");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const syncDownload = async () => {
+    if (!syncKey.trim()) return;
+    setSyncing(true);
+    setSyncStatus("");
+    try {
+      const data = await downloadSync(syncKey.trim());
+      applyData(data);
+      window.location.reload();
+    } catch {
+      setSyncStatus("下载失败，请检查同步配置");
+      setSyncing(false);
+    }
   };
 
   const clearData = () => {
@@ -286,6 +340,20 @@ export default function SettingsPage() {
               <button type="button" onClick={exportData} className="btn-secondary w-full text-[0.76rem]">
                 导出本地数据（JSON）
               </button>
+              <button type="button" onClick={() => fileRef.current?.click()} className="btn-secondary w-full text-[0.76rem]">
+                导入备份
+              </button>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="application/json"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) void importData(file);
+                  event.target.value = "";
+                }}
+              />
               <button
                 type="button"
                 onClick={clearData}
@@ -294,6 +362,7 @@ export default function SettingsPage() {
                 清除所有学习数据
               </button>
             </div>
+            {importError && <p className="mt-3 text-[0.68rem] text-coral">{importError}</p>}
             <div className="mt-4 space-y-2 text-[0.68rem] text-ink-faint">
               <div className="flex justify-between">
                 <span>练习记录</span>
@@ -309,6 +378,30 @@ export default function SettingsPage() {
               </div>
             </div>
           </section>
+          {SYNC_URL && (
+            <section className="surface p-5 sm:p-6">
+              <SectionHeading title="云端同步" />
+              <p className="mb-3 text-[0.68rem] leading-relaxed text-ink-faint">
+                使用同步密钥上传或恢复学习数据。密钥只保存在当前浏览器。
+              </p>
+              <input
+                className="field text-[0.78rem]"
+                type="password"
+                value={syncKey}
+                onChange={(event) => setSyncKey(event.target.value)}
+                placeholder="同步密钥"
+              />
+              <div className="mt-2 flex gap-2">
+                <button type="button" onClick={syncUpload} disabled={syncing || !syncKey.trim()} className="btn-secondary flex-1 text-[0.72rem]">
+                  {syncing ? "同步中…" : "上传"}
+                </button>
+                <button type="button" onClick={syncDownload} disabled={syncing || !syncKey.trim()} className="btn-secondary flex-1 text-[0.72rem]">
+                  恢复
+                </button>
+              </div>
+              {syncStatus && <p className="mt-2 text-[0.66rem] text-ink-faint">{syncStatus}</p>}
+            </section>
+          )}
 
 
 

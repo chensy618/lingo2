@@ -7,9 +7,11 @@ import { LANGUAGES, LANG_CODES, LEVEL_LABELS } from "@/lib/types";
 import {
   attemptsToday,
   dueReview,
+  reviewQueue,
   streakFromAttempts,
   useAttempts,
   useHydrated,
+  useOnboarded,
   usePreferences,
 } from "@/lib/storage";
 import { greeting, sessionHref } from "@/lib/utils";
@@ -22,6 +24,7 @@ import {
   TranslateIcon,
 } from "@/components/icons";
 import { LangBadge, ProgressRing, SectionHeading, TrackPill } from "@/components/ui";
+import { Onboarding } from "@/components/Onboarding";
 
 function recommendedFor(preferences: ReturnType<typeof usePreferences>[0]) {
   const exact = EXERCISES.filter(
@@ -34,8 +37,9 @@ function recommendedFor(preferences: ReturnType<typeof usePreferences>[0]) {
 }
 
 export default function DashboardPage() {
-  const [preferences] = usePreferences();
+  const [preferences, setPreferences] = usePreferences();
   const [attempts] = useAttempts();
+  const [onboarded, setOnboarded] = useOnboarded();
   const mounted = useHydrated();
 
   const dateLabel = mounted
@@ -51,6 +55,7 @@ export default function DashboardPage() {
   const today = attemptsToday(attempts);
   const streak = streakFromAttempts(attempts);
   const review = dueReview(attempts);
+  const backlog = reviewQueue(attempts);
   const goalPercent = Math.min(100, Math.round((today / preferences.dailyGoal) * 100));
   const recommendations = recommendedFor(preferences);
 
@@ -63,6 +68,22 @@ export default function DashboardPage() {
 
   return (
     <div className="animate-fade">
+      {mounted && !onboarded && attempts.length === 0 && (
+        <Onboarding
+          preferences={preferences}
+          onSkip={() => setOnboarded(true)}
+          onComplete={(target, level) => {
+            setPreferences((prev) => ({
+              ...prev,
+              target,
+              source: prev.source === target ? (target === "zh" ? "en" : "zh") : prev.source,
+              level,
+              profileLevels: { ...prev.profileLevels, [target]: level },
+            }));
+            setOnboarded(true);
+          }}
+        />
+      )}
       <header className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="mb-2 text-[0.68rem] font-medium text-ink-faint">{dateLabel}</p>
@@ -106,7 +127,7 @@ export default function DashboardPage() {
                 source: continueSource,
                 level: continueLevel,
                 track: continueTrack,
-                start: true,
+                resume: true,
               })}
               className="btn-primary ml-auto"
             >
@@ -140,7 +161,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="font-display text-lg text-ink">{review.length}</p>
-              <p className="mt-0.5 text-[0.6rem] text-ink-faint">待复习</p>
+              <p className="mt-0.5 text-[0.6rem] text-ink-faint">今日到期</p>
             </div>
           </div>
         </section>
@@ -264,8 +285,12 @@ export default function DashboardPage() {
                   <TargetIcon className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="text-[0.8rem] font-medium text-ink">暂无待复习</p>
-                  <p className="mt-0.5 text-[0.65rem] text-ink-faint">不熟悉的题目会自动进入这里。</p>
+                  <p className="text-[0.8rem] font-medium text-ink">
+                    {backlog.length ? `${backlog.length} 道题等待巩固` : "暂无待复习"}
+                  </p>
+                  <p className="mt-0.5 text-[0.65rem] text-ink-faint">
+                    {backlog.length ? "可在学习记录中查看错题与下次复习时间。" : "不熟悉的题目会自动进入这里。"}
+                  </p>
                 </div>
               </div>
             )}

@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useRef, useSyncExternalStore } from "react";
 import type { Dispatch, SetStateAction } from "react";
-import type { Attempt, Preferences, SelfRating, VocabStatus } from "./types";
+import type { Attempt, Lang, Level, Preferences, SelfRating, Track, VocabStatus } from "./types";
 
 export const STORAGE_KEYS = {
   preferences: "lingo2.preferences.v1",
@@ -31,6 +31,66 @@ export interface LastSession {
   track: string;
   exerciseId: string;
   at: string;
+}
+
+export interface SessionSnapshot {
+  version: 1;
+  config: {
+    target: Lang;
+    source: Lang;
+    level: Level;
+    track: Track;
+    size: number;
+    topic?: string;
+    ids?: string[];
+    label?: string;
+  };
+  exerciseIds: string[];
+  index: number;
+  answer: string;
+  submitted: boolean;
+  similarities: Record<string, number>;
+  ratings: Record<string, SelfRating>;
+  savedAt: string;
+}
+
+const SNAPSHOT_KEY = "lingo2.active-session.v1";
+
+export function readSessionSnapshot(): SessionSnapshot | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(SNAPSHOT_KEY);
+    if (!raw) return null;
+    const snapshot = JSON.parse(raw) as SessionSnapshot;
+    if (snapshot.version !== 1 || !Array.isArray(snapshot.exerciseIds) || !snapshot.exerciseIds.length) {
+      return null;
+    }
+    return snapshot;
+  } catch {
+    return null;
+  }
+}
+
+export function writeSessionSnapshot(snapshot: SessionSnapshot) {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(SNAPSHOT_KEY, JSON.stringify({ ...snapshot, savedAt: new Date().toISOString() }));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+export function clearSessionSnapshot() {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.removeItem(SNAPSHOT_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+export function hasSessionSnapshot() {
+  return readSessionSnapshot() !== null;
 }
 
 interface StoreEntry<T> {
@@ -172,6 +232,14 @@ export function useBookmarks() {
   return useStoredState<string[]>(STORAGE_KEYS.bookmarks, []);
 }
 
+export function useOnboarded() {
+  return useStoredState<boolean>("lingo2.onboarded.v1", false);
+}
+
+export function useSyncKey() {
+  return useStoredState<string>("lingo2.sync-key.v1", "");
+}
+
 export function buildAttempt(input: {
   exerciseId: string;
   target: Attempt["target"];
@@ -182,8 +250,12 @@ export function buildAttempt(input: {
   selfRating: SelfRating;
   similarity: number;
 }): Attempt {
+  const createdAt = new Date();
+  const intervalDays = input.selfRating === "again" ? 1 : input.selfRating === "hard" ? 3 : 7;
+  const nextReviewAt = new Date(createdAt.getTime() + intervalDays * 24 * 60 * 60 * 1000);
+
   return {
-    id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+    id: `${createdAt.getTime().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
     exerciseId: input.exerciseId,
     target: input.target,
     source: input.source,
@@ -192,7 +264,8 @@ export function buildAttempt(input: {
     answer: input.answer,
     selfRating: input.selfRating,
     similarity: Number(input.similarity.toFixed(3)),
-    createdAt: new Date().toISOString(),
+    createdAt: createdAt.toISOString(),
+    nextReviewAt: nextReviewAt.toISOString(),
   };
 }
 
@@ -234,7 +307,7 @@ export function attemptsToday(attempts: Attempt[]) {
   }).length;
 }
 
-export function dueReview(attempts: Attempt[]) {
+function latestAttempts(attempts: Attempt[]) {
   const latestByExercise = new Map<string, Attempt>();
   for (const attempt of attempts) {
     const existing = latestByExercise.get(attempt.exerciseId);
@@ -242,7 +315,27 @@ export function dueReview(attempts: Attempt[]) {
       latestByExercise.set(attempt.exerciseId, attempt);
     }
   }
-  return Array.from(latestByExercise.values())
+  return Array.from(latestByExercise.values());
+}
+
+export function reviewDate(attempt: Attempt) {
+  if (attempt.nextReviewAt) return new Date(attempt.nextReviewAt);
+  const intervalDays = attempt.selfRating === "again" ? 1 : attempt.selfRating === "hard" ? 3 : 7;
+  return new Date(new Date(attempt.createdAt).getTime() + intervalDays * 24 * 60 * 60 * 1000);
+}
+
+export function dueReview(attempts: Attempt[], now = new Date()) {
+  return latestAttempts(attempts)
+    .filter((attempt) => reviewDate(attempt).getTime() <= now.getTime())
+    .sort((a, b) => reviewDate(a).getTime() - reviewDate(b).getTime());
+}
+
+export function reviewQueue(attempts: Attempt[]) {
+  return latestAttempts(attempts)
     .filter((attempt) => attempt.selfRating !== "good")
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+export function upcomingReviewCount(attempts: Attempt[], now = new Date()) {
+  return latestAttempts(attempts).filter((attempt) => reviewDate(attempt).getTime() > now.getTime()).length;
 }

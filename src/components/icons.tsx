@@ -267,3 +267,12 @@ export function EarIcon(props: IconProps) {
     </Base>
   );
 }
+
+export function SpeakerIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M4.5 9.5h3l4-3.2v11.4l-4-3.2h-3z" />
+      <path d="M15.2 9a4.2 4.2 0 0 1 0 6M17.8 6.5a7.7 7.7 0 0 1 0 11" />
+    </Base>
+  );
+}

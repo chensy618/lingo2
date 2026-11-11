@@ -3,20 +3,29 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { EXERCISE_MAP } from "@/lib/exercises";
+import { relatedVocabulary } from "@/lib/vocabLinks";
+import { AI_FEEDBACK_URL, requestAiFeedback } from "@/lib/ai";
 import { TOPICS } from "@/lib/topics";
+import { SCENARIOS } from "@/lib/scenarios";
 import {
   buildAttempt,
+  clearSessionSnapshot,
+  readSessionSnapshot,
   useAttempts,
   useBookmarks,
   usePreferences,
+  useVocabState,
+  writeSessionSnapshot,
+  type SessionSnapshot,
 } from "@/lib/storage";
 import type { Exercise, Lang, Level, SelfRating, Track } from "@/lib/types";
 import { LANGUAGES, LANG_CODES, LEVELS, TRACKS } from "@/lib/types";
 import {
+  analyzeAnswer,
   buildSession,
   cn,
   formatPercent,
-  similarity,
   similarityLabel,
   type SessionResult,
 } from "@/lib/utils";
@@ -31,6 +40,7 @@ import {
   TranslateIcon,
 } from "@/components/icons";
 import { InfoNote, LangBadge, PageHeader, ProgressBar } from "@/components/ui";
+import { SpeakButton } from "@/components/SpeakButton";
 
 const PLACEHOLDERS: Record<Lang, string> = {
   en: "Write your translation here ...",
@@ -63,6 +73,8 @@ interface Config {
   track: Track;
   topic?: string;
   size: number;
+  ids?: string[];
+  label?: string;
 }
 
 function isLang(value: string | null): value is Lang {
@@ -106,6 +118,7 @@ function TranslationClient() {
   const [preferences, setPreferences, preferencesHydrated] = usePreferences();
   const [, setAttempts] = useAttempts();
   const [bookmarks, setBookmarks] = useBookmarks();
+  const [vocabState, setVocabState] = useVocabState();
 
   const [config, setConfig] = useState<Config>({
     target: preferences.target,
@@ -120,10 +133,12 @@ function TranslationClient() {
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [currentSimilarity, setCurrentSimilarity] = useState(0);
   const [similarities, setSimilarities] = useState<Record<string, number>>({});
   const [ratings, setRatings] = useState<Record<string, SelfRating>>({});
   const [error, setError] = useState("");
+  const [aiFeedback, setAiFeedback] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
   const feedbackRef = useRef<HTMLDivElement>(null);
   const booted = useRef(false);
 
@@ -132,6 +147,53 @@ function TranslationClient() {
   const targetMeta = LANGUAGES[config.target];
   const sourceMeta = LANGUAGES[config.source];
   const thirdLang = LANG_CODES.find((lang) => lang !== config.target && lang !== config.source) ?? "en";
+  const currentAnalysis = useMemo(
+    () => (current ? analyzeAnswer(answer, current.variants[config.target], config.target) : null),
+    [current, answer, config.target],
+  );
+  const relatedVocab = useMemo(
+    () => (current ? relatedVocabulary(current, config.target) : []),
+    [current, config.target],
+  );
+
+  const saveSnapshot = (
+    overrides: Partial<Pick<SessionSnapshot, "index" | "answer" | "submitted" | "similarities" | "ratings">> = {},
+  ) => {
+    if (!session.length) return;
+    writeSessionSnapshot({
+      version: 1,
+      config,
+      exerciseIds: session.map((exercise) => exercise.id),
+      index,
+      answer,
+      submitted,
+      similarities,
+      ratings,
+      savedAt: new Date().toISOString(),
+      ...overrides,
+    });
+  };
+
+  const restoreSession = useCallback((snapshot: SessionSnapshot) => {
+    const exercises = snapshot.exerciseIds
+      .map((id) => EXERCISE_MAP[id])
+      .filter((exercise): exercise is Exercise => Boolean(exercise));
+    if (!exercises.length) {
+      clearSessionSnapshot();
+      return false;
+    }
+    const safeIndex = Math.min(Math.max(snapshot.index, 0), exercises.length - 1);
+    setConfig(snapshot.config);
+    setSession(exercises);
+    setSessionNote({ exercises, exactCount: exercises.length, usedNeighbourLevels: [], usedOtherTopics: false });
+    setIndex(safeIndex);
+    setAnswer(snapshot.answer);
+    setSubmitted(snapshot.submitted);
+    setSimilarities(snapshot.similarities);
+    setRatings(snapshot.ratings);
+    setStage("session");
+    return true;
+  }, []);
 
   const startSession = useCallback(
     (nextConfig: Config) => {
@@ -141,6 +203,7 @@ function TranslationClient() {
         level: nextConfig.level,
         track: nextConfig.track,
         topic: nextConfig.topic,
+        ids: nextConfig.ids,
         size: nextConfig.size,
       });
 
@@ -150,15 +213,26 @@ function TranslationClient() {
       }
 
       setError("");
+      setConfig(nextConfig);
       setSession(result.exercises);
       setSessionNote(result);
       setIndex(0);
       setAnswer("");
       setSubmitted(false);
-      setCurrentSimilarity(0);
       setSimilarities({});
       setRatings({});
       setStage("session");
+      writeSessionSnapshot({
+        version: 1,
+        config: nextConfig,
+        exerciseIds: result.exercises.map((exercise) => exercise.id),
+        index: 0,
+        answer: "",
+        submitted: false,
+        similarities: {},
+        ratings: {},
+        savedAt: new Date().toISOString(),
+      });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [],
@@ -171,26 +245,38 @@ function TranslationClient() {
     const target = isLang(searchParams.get("target")) ? (searchParams.get("target") as Lang) : preferences.target;
     let source = isLang(searchParams.get("source")) ? (searchParams.get("source") as Lang) : preferences.source;
     source = fallbackSource(target, source);
-    const level = isLevel(searchParams.get("level")) ? (searchParams.get("level") as Level) : preferences.level;
-    const track = isTrack(searchParams.get("track")) ? (searchParams.get("track") as Track) : preferences.track;
+    let level = isLevel(searchParams.get("level")) ? (searchParams.get("level") as Level) : preferences.level;
+    let track = isTrack(searchParams.get("track")) ? (searchParams.get("track") as Track) : preferences.track;
     const topic = searchParams.get("topic") ?? undefined;
+    const scenario = SCENARIOS.find((item) => item.id === searchParams.get("scenario"));
+
+    if (scenario) {
+      level = scenario.level;
+      track = scenario.track;
+    }
 
     const nextConfig: Config = {
       target,
       source,
       level,
       track,
-      topic,
-      size: preferences.sessionSize,
+      topic: scenario ? undefined : topic,
+      size: scenario ? scenario.exerciseIds.length : preferences.sessionSize,
+      ids: scenario?.exerciseIds,
+      label: scenario?.title,
     };
     // The URL can prefill and auto-start a session; this is an external navigation input.
     setConfig(nextConfig);
 
-    if (searchParams.get("start") === "1") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (searchParams.get("resume") === "1") {
+      const snapshot = readSessionSnapshot();
+      if (snapshot && restoreSession(snapshot)) return;
+    }
+
+    if (searchParams.get("start") === "1" || searchParams.get("resume") === "1") {
       startSession(nextConfig);
     }
-  }, [preferencesHydrated, preferences, searchParams, startSession]);
+  }, [preferencesHydrated, preferences, searchParams, startSession, restoreSession]);
 
   const availableTopics = useMemo(() => {
     if (config.track === "mixed") return TOPICS;
@@ -217,24 +303,25 @@ function TranslationClient() {
   };
 
   const begin = () => {
+    const nextConfig: Config = { ...config, ids: undefined, label: undefined, topic: config.topic };
     setPreferences((prev) => ({
       ...prev,
-      target: config.target,
-      source: config.source,
-      level: config.level,
-      track: config.track,
-      sessionSize: config.size,
+      target: nextConfig.target,
+      source: nextConfig.source,
+      level: nextConfig.level,
+      track: nextConfig.track,
+      sessionSize: nextConfig.size,
     }));
-    startSession(config);
+    startSession(nextConfig);
   };
 
   const submit = () => {
     if (!current || submitted) return;
-    const refs = current.variants[config.target];
-    const score = similarity(answer, refs, config.target);
-    setCurrentSimilarity(score);
-    setSimilarities((prev) => ({ ...prev, [current.id]: score }));
+    const analysis = analyzeAnswer(answer, current.variants[config.target], config.target);
+    const nextSimilarities = { ...similarities, [current.id]: analysis.coverage };
+    setSimilarities(nextSimilarities);
     setSubmitted(true);
+    saveSnapshot({ submitted: true, similarities: nextSimilarities });
     window.setTimeout(() => {
       feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 80);
@@ -242,9 +329,10 @@ function TranslationClient() {
 
   const revealOnly = () => {
     if (!current) return;
-    setCurrentSimilarity(0);
-    setSimilarities((prev) => ({ ...prev, [current.id]: 0 }));
+    const nextSimilarities = { ...similarities, [current.id]: 0 };
+    setSimilarities(nextSimilarities);
     setSubmitted(true);
+    saveSnapshot({ submitted: true, similarities: nextSimilarities });
     window.setTimeout(() => {
       feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 80);
@@ -260,10 +348,11 @@ function TranslationClient() {
       track: current.track,
       answer,
       selfRating: rating,
-      similarity: similarities[current.id] ?? currentSimilarity,
+      similarity: similarities[current.id] ?? currentAnalysis?.coverage ?? 0,
     });
+    const nextRatings = { ...ratings, [current.id]: rating };
     setAttempts((prev) => [attempt, ...prev]);
-    setRatings((prev) => ({ ...prev, [current.id]: rating }));
+    setRatings(nextRatings);
 
     try {
       window.localStorage.setItem(
@@ -282,27 +371,31 @@ function TranslationClient() {
     }
 
     if (index + 1 >= session.length) {
+      clearSessionSnapshot();
       setStage("summary");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      setIndex((value) => value + 1);
+      const nextIndex = index + 1;
+      saveSnapshot({ index: nextIndex, answer: "", submitted: false, ratings: nextRatings });
+      setIndex(nextIndex);
       setAnswer("");
       setSubmitted(false);
-      setCurrentSimilarity(0);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const skip = () => {
     if (index + 1 >= session.length) {
+      clearSessionSnapshot();
       setStage("summary");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    setIndex((value) => value + 1);
+    const nextIndex = index + 1;
+    saveSnapshot({ index: nextIndex, answer: "", submitted: false });
+    setIndex(nextIndex);
     setAnswer("");
     setSubmitted(false);
-    setCurrentSimilarity(0);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -313,7 +406,38 @@ function TranslationClient() {
     );
   };
 
+  const askAi = async () => {
+    if (!current || !AI_FEEDBACK_URL) return;
+    setAiLoading(true);
+    setAiError("");
+    try {
+      const feedback = await requestAiFeedback({
+        sourceLanguage: config.source,
+        targetLanguage: config.target,
+        level: current.levels[config.target],
+        prompt: current.variants[config.source][0],
+        answer,
+        references: current.variants[config.target],
+        explanationTerms: current.notes.map((note) => note.term),
+      });
+      setAiFeedback(feedback);
+    } catch {
+      setAiError("AI 反馈暂时不可用，请稍后再试。");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const cycleVocab = (id: string) => {
+    setVocabState((prev) => {
+      const status = prev[id]?.status ?? "new";
+      const next = status === "new" ? "learning" : status === "learning" ? "known" : "new";
+      return { ...prev, [id]: { status: next, updatedAt: new Date().toISOString() } };
+    });
+  };
+
   const resetToSetup = () => {
+    clearSessionSnapshot();
     setStage("setup");
     setSession([]);
     setIndex(0);
@@ -495,6 +619,12 @@ function TranslationClient() {
               <p className="mt-3 text-[0.64rem] leading-relaxed text-ink-faint">
                 提交后可查看三语言答案与解析。
               </p>
+              <Link
+                href="/translation?resume=1"
+                className="mt-3 block text-center text-[0.66rem] font-medium text-ink-faint hover:text-moss"
+              >
+                继续未完成的练习
+              </Link>
             </div>
           </aside>
         </div>
@@ -518,7 +648,7 @@ function TranslationClient() {
                 {session.length} 题 · {targetMeta.label}
               </p>
               <p className="mt-1.5 text-[0.78rem] text-paper-light/70">
-                自评掌握 {good}/{rated.length || session.length} · 平均参考匹配 {formatPercent(average)}
+                自评掌握 {good}/{rated.length || session.length} · 平均参考覆盖 {formatPercent(average)}
               </p>
             </div>
             <div className="grid grid-cols-3 divide-x divide-line">
@@ -598,7 +728,8 @@ function TranslationClient() {
   const currentIndex = index + 1;
   const progress = (currentIndex / session.length) * 100;
   const isBookmarked = bookmarks.includes(current.id);
-  const scoreMeta = similarityLabel(currentSimilarity);
+  const coverage = currentAnalysis?.coverage ?? 0;
+  const scoreMeta = similarityLabel(coverage);
   const rating = ratings[current.id];
 
   return (
@@ -609,6 +740,7 @@ function TranslationClient() {
           调整设置
         </button>
         <p className="text-[0.7rem] text-ink-faint">
+          {config.label ? `${config.label} · ` : ""}
           {targetMeta.label} · {current.levels[config.target]} · {TRACKS[current.track].label}
         </p>
       </div>
@@ -643,9 +775,12 @@ function TranslationClient() {
               译为 {targetMeta.zhLabel}
             </div>
 
-            <p className="mt-5 text-[1.35rem] font-medium leading-[1.5] text-ink sm:text-[1.55rem]">
-              {current.variants[config.source][0]}
-            </p>
+            <div className="mt-5 flex items-start gap-3">
+              <p className="flex-1 text-[1.35rem] font-medium leading-[1.5] text-ink sm:text-[1.55rem]">
+                {current.variants[config.source][0]}
+              </p>
+              <SpeakButton text={current.variants[config.source][0]} lang={config.source} />
+            </div>
 
             {current.context?.[config.source] && (
               <p className="mt-3 text-[0.76rem] leading-relaxed text-ink-faint">{current.context[config.source]}</p>
@@ -659,7 +794,11 @@ function TranslationClient() {
             </p>
             <textarea
               value={answer}
-              onChange={(event) => setAnswer(event.target.value)}
+              onChange={(event) => {
+                const value = event.target.value;
+                setAnswer(value);
+                if (!submitted) saveSnapshot({ answer: value });
+              }}
               disabled={submitted}
               rows={5}
               placeholder={PLACEHOLDERS[config.target]}
@@ -713,30 +852,39 @@ function TranslationClient() {
                     <p className="eyebrow">Reference</p>
                     <h2 className="mt-1 font-display text-xl text-ink">参考译文与解析</h2>
                   </div>
-                  <div className="flex items-center gap-3 rounded-2xl border border-line bg-paper px-4 py-2.5">
-                    <div className="text-right">
-                      <p className="text-[0.6rem] uppercase tracking-[0.12em] text-ink-faint">参考匹配</p>
-                      <p className="font-display text-lg leading-none text-ink">{formatPercent(currentSimilarity)}</p>
+                  <div className="w-full max-w-[13rem] rounded-xl border border-line bg-paper px-3 py-2.5">
+                    <div className="flex items-center justify-between text-[0.62rem] text-ink-faint">
+                      <span>参考覆盖</span>
+                      <span className="font-semibold text-ink">{formatPercent(coverage)} · {scoreMeta.label}</span>
                     </div>
-                    <span
-                      className={cn(
-                        "rounded-full px-2 py-1 text-[0.6rem] font-semibold",
-                        scoreMeta.tone === "good"
-                          ? "bg-moss-soft text-moss"
-                          : scoreMeta.tone === "ok"
-                            ? "bg-gold-soft text-[#7a5c26]"
-                            : "bg-coral-soft text-[#8c452e]",
-                      )}
-                    >
-                      {scoreMeta.label}
-                    </span>
+                    <ProgressBar value={coverage * 100} className="mt-2" />
                   </div>
                 </div>
 
-                <div className="mt-4">
-                  <InfoNote>
-                    这是与参考译文的结构化比对，不是唯一评分。翻译允许多种自然表达，请结合下方解析自评。
-                  </InfoNote>
+                <div className="mt-4 space-y-2">
+                  <p className="text-[0.68rem] leading-relaxed text-ink-faint">
+                    覆盖率只衡量词级重合，不代表表达好坏；请结合解析与自评判断。
+                  </p>
+                  {(currentAnalysis?.missing.length ?? 0) > 0 && (
+                    <p className="flex flex-wrap items-center gap-1.5 text-[0.64rem] text-ink-faint">
+                      参考中还包含：
+                      {currentAnalysis?.missing.slice(0, 6).map((token) => (
+                        <span key={token} className="rounded-full bg-paper px-2 py-0.5 text-ink-soft">
+                          {token}
+                        </span>
+                      ))}
+                    </p>
+                  )}
+                  {(currentAnalysis?.extra.length ?? 0) > 0 && (
+                    <p className="flex flex-wrap items-center gap-1.5 text-[0.64rem] text-ink-faint">
+                      你的答案多出：
+                      {currentAnalysis?.extra.slice(0, 4).map((token) => (
+                        <span key={token} className="rounded-full bg-coral-soft/60 px-2 py-0.5 text-[#8c452e]">
+                          {token}
+                        </span>
+                      ))}
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-5 rounded-2xl border border-moss/20 bg-moss-soft/35 p-4 sm:p-5">
@@ -746,9 +894,12 @@ function TranslationClient() {
                       {targetMeta.label} · 目标语言
                     </p>
                   </div>
-                  <p className="mt-3 text-[1.05rem] font-medium leading-relaxed text-ink">
-                    {current.variants[config.target][0]}
-                  </p>
+                  <div className="mt-3 flex items-start gap-3">
+                    <p className="flex-1 text-[1.05rem] font-medium leading-relaxed text-ink">
+                      {current.variants[config.target][0]}
+                    </p>
+                    <SpeakButton text={current.variants[config.target][0]} lang={config.target} />
+                  </div>
                   {current.variants[config.target].length > 1 && (
                     <div className="mt-3 border-t border-moss/15 pt-3">
                       <p className="text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-ink-faint">也可以说</p>
@@ -798,6 +949,48 @@ function TranslationClient() {
                     ))}
                   </div>
                 </div>
+                {relatedVocab.length > 0 && (
+                  <div className="mt-5 border-t border-line pt-5">
+                    <p className="text-[0.64rem] font-semibold uppercase tracking-[0.12em] text-ink-faint">相关词汇</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {relatedVocab.map((entry) => {
+                        const status = vocabState[entry.id]?.status ?? "new";
+                        return (
+                          <button
+                            key={entry.id}
+                            type="button"
+                            onClick={() => cycleVocab(entry.id)}
+                            className="inline-flex items-center gap-2 rounded-full border border-line bg-paper-light px-3 py-1.5 text-[0.7rem] text-ink-soft transition hover:border-moss/40 hover:text-ink"
+                          >
+                            <span className="font-semibold text-ink">{entry.translations[config.target]}</span>
+                            <span className="text-[0.6rem] text-ink-faint">
+                              {status === "new" ? "+ 词表" : status === "learning" ? "学习中" : "已掌握"}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+                {AI_FEEDBACK_URL && (
+                  <div className="mt-5 border-t border-line pt-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[0.64rem] font-semibold uppercase tracking-[0.12em] text-ink-faint">AI 反馈</p>
+                      <button type="button" onClick={askAi} disabled={aiLoading} className="btn-secondary text-[0.68rem]">
+                        {aiLoading ? "分析中…" : "分析我的译文"}
+                      </button>
+                    </div>
+                    <p className="mt-1.5 text-[0.62rem] text-ink-faint">
+                      会把题目与译文发送到你配置的 AI 服务；结果仅供参考。
+                    </p>
+                    {aiError && <p className="mt-2 text-[0.7rem] text-coral">{aiError}</p>}
+                    {aiFeedback && (
+                      <p className="mt-3 whitespace-pre-wrap rounded-2xl bg-paper px-4 py-3 text-[0.8rem] leading-relaxed text-ink-soft">
+                        {aiFeedback}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}

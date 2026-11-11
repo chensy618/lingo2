@@ -131,6 +131,7 @@ export interface Scenario {
   level: Level;
   target?: Lang;
   steps: string[];
+  exerciseIds: string[];
 }
 
 export interface Attempt {
@@ -144,6 +145,7 @@ export interface Attempt {
   selfRating: SelfRating;
   similarity: number;
   createdAt: string;
+  nextReviewAt?: string;
 }
 
 export interface VocabStatus {

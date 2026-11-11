@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { EXERCISES } from "@/lib/exercises";
 import { SCENARIOS } from "@/lib/scenarios";
 import { TOPICS } from "@/lib/topics";
 import { usePreferences } from "@/lib/storage";
@@ -15,13 +14,6 @@ import {
   CompassIcon,
 } from "@/components/icons";
 import { LangBadge, LevelPill, PageHeader, TrackPill } from "@/components/ui";
-
-function exerciseFor(topic: string, track: BaseTrack) {
-  return (
-    EXERCISES.find((exercise) => exercise.topic === topic && exercise.track === track) ??
-    EXERCISES.find((exercise) => exercise.track === track)
-  );
-}
 
 export default function SituationsPage() {
   const [preferences] = usePreferences();
@@ -138,8 +130,7 @@ export default function SituationsPage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {scenarios.map((scenario, index) => {
-          const exercise = exerciseFor(scenario.topic, scenario.track);
-          const level = exercise?.levels[activeTarget] ?? scenario.level;
+          const level = scenario.level;
           return (
             <article
               key={scenario.id}
@@ -173,21 +164,15 @@ export default function SituationsPage() {
 
               <div className="border-t border-line bg-paper/45 px-5 py-3.5">
                 <Link
-                  href={
-                    exercise
-                      ? sessionHref({
-                          target: activeTarget,
-                          source,
-                          level,
-                          track: scenario.track,
-                          topic: scenario.topic,
-                          start: true,
-                        })
-                      : "/translation"
-                  }
+                  href={sessionHref({
+                    target: activeTarget,
+                    source,
+                    scenario: scenario.id,
+                    start: true,
+                  })}
                   className="flex items-center justify-between text-[0.76rem] font-semibold text-ink transition group-hover:text-moss"
                 >
-                  进入情境练习
+                  进入情境练习 · {scenario.exerciseIds.length} 句
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line-strong bg-white/60 transition group-hover:border-moss/40 group-hover:bg-moss group-hover:text-paper-light">
                     <ArrowUpRightIcon className="h-3.5 w-3.5" />
                   </span>

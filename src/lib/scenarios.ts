@@ -10,6 +10,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "food",
     level: "A1",
     steps: ["向店员问好", "点一杯饮品和一份点心", "询问价格并道谢"],
+    exerciseIds: ["tr_a1_0002", "tr_a1_0004", "tr_a1_0009"],
   },
   {
     id: "sc_train",
@@ -20,6 +21,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "travel",
     level: "A2",
     steps: ["询问下一班车", "确认站台", "询问是否需要换乘"],
+    exerciseIds: ["tr_a2_0001", "tr_b1_0008", "tr_b1_0004"],
   },
   {
     id: "sc_doctor",
@@ -30,6 +32,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "health",
     level: "B1",
     steps: ["说明主要症状", "描述持续时间和严重程度", "预约合适的时间"],
+    exerciseIds: ["tr_a2_0003", "tr_b1_0003", "tr_a1_0008"],
   },
   {
     id: "sc_colleague",
@@ -40,6 +43,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "work",
     level: "B1",
     steps: ["说明需要调整", "解释原因", "提出新的时间建议"],
+    exerciseIds: ["tr_b1_0002", "tr_b2_0003", "tr_b2_0002"],
   },
   {
     id: "sc_rent",
@@ -50,6 +54,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "housing",
     level: "B2",
     steps: ["询问房屋基本情况", "确认租金与包含费用", "讨论合同期限"],
+    exerciseIds: ["tr_a2_0002", "tr_b2_0001", "tr_b2_0003"],
   },
   {
     id: "sc_conference",
@@ -60,6 +65,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "conference",
     level: "B1",
     steps: ["介绍姓名与机构", "概述研究兴趣", "表达合作意愿"],
+    exerciseIds: ["tr_b1_0005", "tr_b2_0007", "tr_b1_0007", "tr_a2_0004"],
   },
   {
     id: "sc_methods",
@@ -70,6 +76,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "methods",
     level: "B2",
     steps: ["说明研究设计", "介绍样本与工具", "解释数据分析方法"],
+    exerciseIds: ["tr_b2_0005", "tr_b2_0004", "tr_b1_0006", "tr_c2_0004"],
   },
   {
     id: "sc_findings",
@@ -80,6 +87,7 @@ export const SCENARIOS: Scenario[] = [
     topic: "data",
     level: "C1",
     steps: ["概括主要发现", "说明效应大小", "指出解释上的限制"],
+    exerciseIds: ["tr_c1_0004", "tr_c1_0006", "tr_b2_0006", "tr_c2_0003"],
   },
   {
     id: "sc_review",
@@ -90,5 +98,6 @@ export const SCENARIOS: Scenario[] = [
     topic: "review",
     level: "C2",
     steps: ["概括论文贡献", "指出主要局限", "提出具体修改建议"],
+    exerciseIds: ["tr_c2_0005", "tr_b2_0008", "tr_c2_0003", "tr_c1_0005"],
   },
 ];

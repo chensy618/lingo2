@@ -14,6 +14,7 @@ import {
   SparkIcon,
 } from "@/components/icons";
 import { LangBadge, LevelPill, PageHeader, TrackPill } from "@/components/ui";
+import { SpeakButton } from "@/components/SpeakButton";
 import type { VocabStatus } from "@/lib/types";
 
 type StatusFilter = "all" | "new" | "learning" | "known";
@@ -242,9 +243,15 @@ export default function VocabularyPage() {
                 <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
                   <div>
                     <p className="eyebrow mb-1">{LANGUAGES[focusLang].label}</p>
-                    <h2 className="text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] text-ink">
-                      {selected.translations[focusLang]}
-                    </h2>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-[1.75rem] font-semibold leading-tight tracking-[-0.02em] text-ink">
+                        {selected.translations[focusLang]}
+                      </h2>
+                      <SpeakButton
+                        text={selected.translations[focusLang].split(" / ")[0]}
+                        lang={focusLang}
+                      />
+                    </div>
                   </div>
                   <button
                     type="button"
@@ -327,6 +334,7 @@ export default function VocabularyPage() {
                         <div className="flex items-center gap-2">
                           <LangBadge lang={lang} size="sm" />
                           <span className="text-[0.64rem] font-semibold text-ink-soft">{LANGUAGES[lang].label}</span>
+                          <SpeakButton text={selected.example[lang]} lang={lang} className="ml-auto h-6 w-6" />
                         </div>
                         <p
                           className={cn(

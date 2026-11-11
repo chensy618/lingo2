@@ -4,9 +4,12 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { EXERCISE_MAP } from "@/lib/exercises";
 import { VOCABULARY } from "@/lib/vocabulary";
+import { weakTags } from "@/lib/tags";
 import {
   attemptsToday,
   dueReview,
+  reviewDate,
+  reviewQueue,
   streakFromAttempts,
   useAttempts,
   useBookmarks,
@@ -64,7 +67,9 @@ export default function ProgressPage() {
     () => [...attempts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
     [attempts],
   );
-  const review = useMemo(() => dueReview(attempts), [attempts]);
+  const due = useMemo(() => dueReview(attempts), [attempts]);
+  const review = useMemo(() => reviewQueue(attempts), [attempts]);
+  const weak = useMemo(() => weakTags(attempts, EXERCISE_MAP), [attempts]);
   const today = attemptsToday(attempts);
   const streak = streakFromAttempts(attempts);
   const knownWords = Object.values(vocabState).filter((entry) => entry.status === "known").length;
@@ -120,9 +125,9 @@ export default function ProgressPage() {
           icon={<ChartIcon className="h-4 w-4" />}
         />
         <StatCard
-          label="待复习"
-          value={`${review.length}`}
-          hint={`${knownWords}/${VOCABULARY.length} 词汇已掌握`}
+          label="今日到期"
+          value={`${due.length}`}
+          hint={`${review.length} 道待巩固 · ${knownWords}/${VOCABULARY.length} 词汇已掌握`}
           icon={<RotateIcon className="h-4 w-4" />}
         />
       </div>
@@ -186,6 +191,23 @@ export default function ProgressPage() {
           </div>
         </section>
       </div>
+
+      <section className="surface mt-4 p-5 sm:p-6">
+        <SectionHeading title="常错知识点" />
+        {weak.length ? (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {weak.map((item) => (
+              <div key={item.tag} className="flex items-center gap-3">
+                <span className="w-24 shrink-0 text-[0.7rem] text-ink-soft">{item.label}</span>
+                <ProgressBar value={(item.count / weak[0].count) * 100} className="flex-1" />
+                <span className="w-6 text-right text-[0.62rem] text-ink-faint">{item.count}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-[0.72rem] text-ink-faint">完成并自评几道题后，这里会显示需要加强的知识点。</p>
+        )}
+      </section>
 
       <div className="mt-8">
         <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -299,6 +321,9 @@ export default function ProgressPage() {
                     <p className="mt-2 line-clamp-2 text-[0.72rem] leading-relaxed text-ink-faint">
                       参考：{exercise.variants[attempt.target][0]}
                     </p>
+                    <p className="mt-1 text-[0.6rem] text-ink-faint">
+                      下次复习：{displayDate(reviewDate(attempt).toISOString())}
+                    </p>
                     <div className="mt-3 flex items-center gap-2 text-[0.62rem] text-ink-faint">
                       <span
                         className={cn(
@@ -332,7 +357,7 @@ export default function ProgressPage() {
               <span className="flex h-12 w-12 items-center justify-center rounded-full bg-moss-soft text-moss">
                 <CheckCircleIcon className="h-5 w-5" />
               </span>
-              <p className="mt-4 font-display text-xl text-ink">复习队列是空的</p>
+              <p className="mt-4 font-display text-xl text-ink">错题本是空的</p>
               <p className="mt-1.5 max-w-sm text-sm text-ink-faint">
                 把练习中不熟悉的题目标记为“需要重练”或“有点难”，它们会自动进入这里。
               </p>

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Commissioner, Fraunces } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "@/components/AppShell";
+import { PwaRegister } from "@/components/PwaRegister";
 
 const commissioner = Commissioner({
   variable: "--font-commissioner",
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
     "在英语、挪威语和汉语之间自由切换，通过分级翻译练习、三语言对照和真实语境词汇卡提升日常与学术表达。",
   applicationName: "lingo²",
   keywords: ["语言学习", "挪威语", "英语", "汉语", "翻译练习", "Norsk", "Bokmål"],
+  appleWebApp: { capable: true, title: "lingo²", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {
@@ -37,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="zh-CN" className={`${commissioner.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="min-h-full">
         <AppShell>{children}</AppShell>
+        <PwaRegister />
       </body>
     </html>
   );
