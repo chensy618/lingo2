@@ -88,15 +88,27 @@
 
 ## 7. 配置生成任务
 
-在仓库中配置：
+### 本机 launchd（当前方式）
+
+GitHub 托管运行器无法解析 Maggie 的 UiT 接口，因此当前使用本机 `launchd`：
+
+- 每天 15:00 运行 `scripts/maggie-daily.sh`
+- 密钥保存在 `~/.config/lingo2/maggie.env`（权限 600）
+- 日志：`~/Library/Logs/lingo2-content.log`
+- 安装：`MAGGIE_API_KEY='...' ./scripts/install-maggie-schedule.sh`
+- 手动测试：`launchctl kickstart -k gui/$(id -u)/com.uit.lingo2.content`
+
+脚本会自动创建 `content/maggie-日期-时间` 分支和审核 PR；如果当天已有 open PR，则跳过。
+
+### GitHub Actions（可选）
 
 - **Settings → Actions → General**：允许 GitHub Actions 创建 Pull Request
-- Repository variable：`ENABLE_AI_CONTENT=true`
-- Secrets：`AI_API_KEY`，可选 `AI_API_URL`、`AI_MODEL`、`AI_TEMPERATURE`
+- Repository variable：`ENABLE_AI_CONTENT=true`（当前为 `false`）
+- Secrets：`MAGGIE_API_KEY`，可选 `AI_API_URL`、`AI_MODEL`、`AI_TEMPERATURE`
+- 默认地址：`http://springfield.uit.no:30800/v1/chat/completions`，默认模型：`maggie`
+- 需要 self-hosted runner 或可访问该接口的网络
 
-`AI_API_URL` 需兼容 OpenAI Chat Completions 格式。未启用时定时任务不会运行，网站继续使用种子题库。
-
-本地测试：
+本地 fixture 测试：
 
 ```bash
 npm run content:generate -- --fixture --count=2 --level=A1 --track=everyday --output=/tmp/candidates.json

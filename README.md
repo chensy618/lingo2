@@ -75,23 +75,39 @@ npm run lint
 
 ## 内容更新与审核
 
-题库不是实时生成的。AI 只负责生成候选，人工审核通过后才会进入网站：
+题库不是实时生成的。Maggie 只负责生成候选，人工审核通过后才会进入网站。
 
-1. 在 **Settings → Actions → General** 允许 GitHub Actions 创建 Pull Request。
-2. 配置仓库变量 `ENABLE_AI_CONTENT=true`，并添加 Secrets：`AI_API_KEY`，可选 `AI_API_URL`、`AI_MODEL`、`AI_TEMPERATURE`。
-3. 每天 05:10 UTC，`Generate content candidates` 调用 AI，把 `pending` 候选写入 `src/content/generated-exercises.json`，并创建 PR。
-4. 审核者按 [`docs/CONTENT_REVIEW.md`](docs/CONTENT_REVIEW.md) 的 16 分制标准逐条检查，直接修改 PR 中的 `review` 字段。
-5. 只有 `review.status === "approved"` 的条目会被前端加载；合并 PR 后自动部署。
-6. 构建前自动运行 `npm run content:validate`，检查 schema、ID、重复、标签与审核完整性。
+### 每日本机生成（当前配置）
 
-也可以手动触发 workflow，或用 fixture 在本地测试：
+Maggie 的 UiT 接口只能从校园网络访问，GitHub 托管运行器无法解析 `springfield.uit.no`，因此每日生成由本机 `launchd` 完成：
+
+1. 安装定时任务（已配置为每天 **15:00**）：
+   ```bash
+   MAGGIE_API_KEY='...' ./scripts/install-maggie-schedule.sh
+   ```
+2. 密钥保存在 `~/.config/lingo2/maggie.env`（权限 600），不进入仓库。
+3. 任务每天生成 `pending` 候选、创建 `content-review` PR，并跳过当天已有 PR 的情况。
+4. 日志：`~/Library/Logs/lingo2-content.log`
+5. 手动运行：
+   ```bash
+   ./scripts/maggie-daily.sh
+   launchctl kickstart -k gui/$(id -u)/com.uit.lingo2.content
+   ```
+
+### 审核与发布
+
+审核者按 [`docs/CONTENT_REVIEW.md`](docs/CONTENT_REVIEW.md) 的 16 分制标准逐条检查，直接修改 PR 中的 `review` 字段。只有 `review.status === "approved"` 的条目会被前端加载；合并 PR 后自动部署。构建前自动运行 `npm run content:validate`。
+
+审核标准包括语义对齐、自然度、等级匹配、语域、语法、解析准确性、原创与安全、技术规范；八项必须全过且总分至少 14/16。
+
+### GitHub Actions（可选）
+
+`Generate content candidates` 仍支持手动触发和 fixture 测试；托管运行器无法访问 UiT 内网，所以仓库变量 `ENABLE_AI_CONTENT` 当前为 `false`。若改用可访问接口或 self-hosted runner，可重新启用。
 
 ```bash
 npm run content:generate -- --fixture --count=2 --level=A1 --track=everyday --output=/tmp/candidates.json
 npm run content:validate -- /tmp/candidates.json
 ```
-
-审核标准包括语义对齐、自然度、等级匹配、语域、语法、解析准确性、原创与安全、技术规范；八项必须全过且总分至少 14/16。
 
 ## 技术栈
 
