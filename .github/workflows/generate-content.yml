@@ -44,12 +44,22 @@ jobs:
         env:
           MAGGIE_API_KEY: ${{ secrets.MAGGIE_API_KEY }}
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_API_URL: ${{ secrets.AI_API_URL }}
         run: |
-          if [ -n "$MAGGIE_API_KEY" ] || [ -n "$AI_API_KEY" ]; then
+          KEY="${MAGGIE_API_KEY:-$AI_API_KEY}"
+          if [ -z "$KEY" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No model API key is configured; skipping content generation."
+            exit 0
+          fi
+          BASE="${AI_API_URL:-http://springfield.uit.no:30800/v1/chat/completions}"
+          MODELS="${BASE%/chat/completions}/models"
+          CODE=$(curl -sS -m 15 -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $KEY" "$MODELS" || true)
+          if [ "$CODE" = "200" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::No model API key is configured; skipping content generation."
+            echo "::warning::Model endpoint is not reachable from this runner (HTTP $CODE). Use a self-hosted runner inside the UiT network."
           fi
 
       - name: Generate candidates

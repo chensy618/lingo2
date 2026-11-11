@@ -143,9 +143,14 @@ function decorate(raw, assignment, index) {
     track,
     topic,
     levels: raw.levels,
-    variants: raw.variants,
-    tags: raw.tags,
-    notes: raw.notes,
+    variants: Object.fromEntries(
+      Object.entries(raw.variants).map(([lang, variants]) => [
+        lang,
+        variants.map((variant) => String(variant).trim()),
+      ]),
+    ),
+    tags: [...new Set(raw.tags.map((tag) => String(tag).trim().toLowerCase()))],
+    notes: raw.notes.map((note) => ({ term: String(note.term).trim(), text: String(note.text).trim() })),
     ...(raw.context ? { context: raw.context } : {}),
     origin: "ai",
     generatedAt: `${today}T00:00:00.000Z`,
