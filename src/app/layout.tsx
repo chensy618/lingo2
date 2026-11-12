@@ -18,7 +18,7 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "lingo² · 英语 · 挪威语 · 汉语",
+    default: "lingo²",
     template: "%s · lingo²",
   },
   description:
