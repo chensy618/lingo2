@@ -132,5 +132,208 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261112_everyday_01_ff2306",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "opinion",
+    "levels": {
+      "en": "B2",
+      "no": "B2",
+      "zh": "B2"
+    },
+    "variants": {
+      "en": [
+        "Even though I see the benefits, I still find it harder to switch off in the evening when I work from home.",
+        "I understand the advantages, but I still think working from home makes it harder to wind down in the evening."
+      ],
+      "no": [
+        "Selv om jeg ser fordelene, synes jeg fortsatt det er vanskeligere å koble av om kvelden når jeg jobber hjemmefra.",
+        "Jeg forstår fordelene, men jeg synes fortsatt at det er vanskeligere å roe seg ned om kvelden når jeg har hjemmekontor."
+      ],
+      "zh": [
+        "尽管我明白有这些好处，我还是觉得在家办公时晚上更难放松下来。",
+        "我理解这些优点，但我仍然认为在家工作让我晚上更难静下心来。"
+      ]
+    },
+    "tags": [
+      "opinion_expression",
+      "concessive_clause",
+      "work_life_balance",
+      "everyday_communication"
+    ],
+    "notes": [
+      {
+        "term": "koble av",
+        "text": "“放松、停止想工作”；常用于工作与休息的切换，比 slappe av 更强调从压力中抽离。"
+      },
+      {
+        "term": "selv om",
+        "text": "“尽管”；引导让步状语从句，挪威语中从句使用正常陈述词序。"
+      },
+      {
+        "term": "switch off",
+        "text": "英语固定搭配，意为“放松下来、不再想工作”；与 wind down 语义接近，但 switch off 更强调切断工作状态。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-12T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-12T14:01:41.916Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "All three languages align well; phrasing is natural for B2 everyday opinion; notes are accurate and useful; fields and tags are complete."
+    }
+  },
+  {
+    "id": "ai_20261112_academic_02_84eb38",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "conference",
+    "levels": {
+      "en": "C1",
+      "no": "C1",
+      "zh": "C1"
+    },
+    "variants": {
+      "en": [
+        "The panel argued that, given the relatively small sample and the limited follow-up period, the findings should be interpreted with caution.",
+        "The panel maintained that the results ought to be treated cautiously because the sample was relatively small and the follow-up period limited."
+      ],
+      "no": [
+        "Panelet hevdet at funnene bør tolkes med forsiktighet, gitt det relativt lille utvalget og den begrensede oppfølgingsperioden.",
+        "Panelet mente at resultatene bør behandles med forsiktighet fordi utvalget var relativt lite og oppfølgingsperioden begrenset."
+      ],
+      "zh": [
+        "专题讨论小组认为，鉴于样本相对较小且随访期有限，应对研究结果谨慎解读。",
+        "专题讨论小组主张，由于样本量相对较小、随访期有限，这些结果应谨慎对待。"
+      ]
+    },
+    "tags": [
+      "academic_conference",
+      "hedging_language",
+      "research_methods",
+      "data_interpretation"
+    ],
+    "notes": [
+      {
+        "term": "given",
+        "text": "“鉴于、考虑到”；学术写作中作介词或分词使用，后接名词短语，引出需要纳入考虑的背景因素。"
+      },
+      {
+        "term": "interpret with caution",
+        "text": "“谨慎解读”；学术语篇常用搭配，用于对结果强度作限定（hedging）。"
+      },
+      {
+        "term": "gitt",
+        "text": "挪威语对应“鉴于、考虑到”，常用于正式书面语；后接名词短语，如 gitt det lille utvalget。"
+      },
+      {
+        "term": "utvalg",
+        "text": "“样本”；在研究方法语境中指参与研究或被分析的对象集合，utvalgsstørrelse 即“样本量”。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-12T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-12T14:01:41.916Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Tone/assertiveness mismatch: en1 'argued' vs no1 'hevdet' vs zh1 '认为'; en2 'maintained' vs no2 'mente' vs zh2 '主张'."
+    }
+  },
+  {
+    "id": "ai_20261112_everyday_03_fa09de",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "food",
+    "levels": {
+      "en": "C2",
+      "no": "C2",
+      "zh": "C2"
+    },
+    "variants": {
+      "en": [
+        "The soup was so bland that no amount of seasoning could rescue it, and we ended up leaving most of it untouched.",
+        "However much seasoning we added, the soup remained so insipid that it was beyond saving, and we left most of it untouched."
+      ],
+      "no": [
+        "Suppen var så smakløs at den ikke kunne reddes uansett hvor mye krydder vi tilsatte, og vi endte opp med å la det meste stå igjen.",
+        "Uansett hvor mye krydder vi tilsatte, forble suppen så smakløs at det ikke var til å redde, og vi lot det meste stå igjen."
+      ],
+      "zh": [
+        "那汤淡得毫无味道，无论加多少调料都救不回来，最后我们大部分都没动。",
+        "无论我们加了多少调料，那汤还是寡淡得无法补救，结果我们大部分都没动。"
+      ]
+    },
+    "tags": [
+      "food_descriptions",
+      "degree_construction",
+      "idiomatic_expression",
+      "register_awareness"
+    ],
+    "notes": [
+      {
+        "term": "no amount of",
+        "text": "“再多的……也（不）”；后接不可数名词，常用于强调某种做法无法改变结果。"
+      },
+      {
+        "term": "beyond saving",
+        "text": "“无法挽救”；比 cannot be saved 更书面、语气更强，适合 C2 表达。"
+      },
+      {
+        "term": "uansett hvor mye",
+        "text": "“无论多少”；挪威语让步结构，后接比较级或数量词时注意正常词序：uansett hvor mye krydder vi tilsatte。"
+      },
+      {
+        "term": "smakløs",
+        "text": "“无味的、寡淡的”；描述食物缺乏味道，比 ikke god 更具体。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-12T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-12T14:01:41.916Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Idiomatic C2 food description; variants are natural and semantically aligned; notes are specific and useful; expressive register is appropriate for everyday storytelling."
+    }
   }
 ]
