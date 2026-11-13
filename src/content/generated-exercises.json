@@ -132,5 +132,207 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261113_everyday_01_305700",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "introductions",
+    "levels": {
+      "en": "C1",
+      "no": "C1",
+      "zh": "C1"
+    },
+    "variants": {
+      "en": [
+        "Even though we had only just met, she introduced me to her colleagues so naturally that I felt as if we had known each other for years.",
+        "Although we had only just met, she presented me to her colleagues with such ease that I felt as if we had known each other for years."
+      ],
+      "no": [
+        "Selv om vi så vidt hadde møtt hverandre, introduserte hun meg for kollegene sine så naturlig at jeg følte at vi hadde kjent hverandre i årevis.",
+        "Selv om vi nettopp hadde møtt hverandre, presenterte hun meg for kollegene sine med en slik selvfølgelighet at jeg følte at vi hadde kjent hverandre i årevis."
+      ],
+      "zh": [
+        "尽管我们才刚刚认识，她把我介绍给同事时却那么自然，让我觉得我们仿佛已经认识多年。",
+        "虽然我们才刚刚认识，她向同事介绍我时却从容自如，让我觉得我们好像已经相识多年。"
+      ]
+    },
+    "tags": [
+      "introductions",
+      "subordinate_clauses",
+      "result_clauses",
+      "social_interaction"
+    ],
+    "notes": [
+      {
+        "term": "only just met",
+        "text": "“刚刚认识”；only just 强调时间间隔很短，语气比 just 更强。"
+      },
+      {
+        "term": "so ... that ...",
+        "text": "“如此……以至于……”；so 后接形容词或副词，that 引导结果状语从句。"
+      },
+      {
+        "term": "as if we had known each other for years",
+        "text": "“仿佛我们已经认识多年”；as if 后常用过去完成时表示假设或与现在事实相反。"
+      },
+      {
+        "term": "så ... at ...",
+        "text": "挪威语结果从句结构；så 后接副词或形容词，at 引导从句。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-13T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-13T14:00:40.858Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "All criteria met; variants are natural, aligned across languages, and appropriate for C1 everyday register."
+    }
+  },
+  {
+    "id": "ai_20261113_academic_02_7d0dfe",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "review",
+    "levels": {
+      "en": "C2",
+      "no": "C2",
+      "zh": "C2"
+    },
+    "variants": {
+      "en": [
+        "Although the review acknowledges the study's methodological limitations, it stops short of questioning whether the authors' conclusions are adequately supported by the data.",
+        "The review acknowledges the study's methodological limitations but stops short of asking whether the data adequately support the authors' conclusions."
+      ],
+      "no": [
+        "Selv om gjennomgangen anerkjenner studiens metodiske begrensninger, går den ikke så langt som å stille spørsmål ved om forfatternes konklusjoner er tilstrekkelig underbygget av dataene.",
+        "Gjennomgangen anerkjenner studiens metodiske begrensninger, men går ikke så langt som å stille spørsmål ved om dataene i tilstrekkelig grad støtter forfatternes konklusjoner."
+      ],
+      "zh": [
+        "尽管这篇综述承认该研究在方法上的局限，却没有进一步质疑作者的结论是否得到了数据的充分支持。",
+        "这篇综述承认该研究的方法局限，但并未进一步追问数据是否充分支持作者的结论。"
+      ]
+    },
+    "tags": [
+      "academic_review",
+      "concession_clauses",
+      "hedging",
+      "research_methodology"
+    ],
+    "notes": [
+      {
+        "term": "stops short of",
+        "text": "“止步于，没有进一步做”；后接动名词，常见于学术评论。"
+      },
+      {
+        "term": "acknowledges",
+        "text": "“承认”；学术语域中常用来表示承认局限、问题或贡献。"
+      },
+      {
+        "term": "gå så langt som å",
+        "text": "挪威语固定表达“走到……的地步”，后接不定式；否定式表示“没有进一步……”。"
+      },
+      {
+        "term": "be supported by the data",
+        "text": "“得到数据的支持”；被动结构常见于学术写作，data 在英语中可作复数或集合名词。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-13T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-13T14:00:40.858Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "All criteria met; academic register, C2 complexity, and cross-language meaning are consistently preserved."
+    }
+  },
+  {
+    "id": "ai_20261113_everyday_03_f4a50a",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "shopping",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "How much does this T-shirt cost?",
+        "How much is this T-shirt?"
+      ],
+      "no": [
+        "Hvor mye koster denne T-skjorten?",
+        "Hva koster denne T-skjorten?"
+      ],
+      "zh": [
+        "这件T恤多少钱？",
+        "这件T恤卖多少钱？"
+      ]
+    },
+    "tags": [
+      "shopping",
+      "prices",
+      "question_forms"
+    ],
+    "notes": [
+      {
+        "term": "How much",
+        "text": "询问价格；可构成 How much does ... cost? 或 How much is ...?"
+      },
+      {
+        "term": "koster",
+        "text": "挪威语动词“价格为”；问价常用 Hvor mye koster ...? 或 Hva koster ...?"
+      },
+      {
+        "term": "多少钱",
+        "text": "中文常用价格问句，通常放在商品之后；口语中也可说“卖多少钱”。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-13T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-13T14:00:40.858Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "All criteria met; simple shopping questions are natural, accurate, and well matched to A1."
+    }
   }
 ]
