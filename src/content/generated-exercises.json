@@ -132,5 +132,205 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261117_everyday_01_096be5",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "housing",
+    "levels": {
+      "en": "B1",
+      "no": "B1",
+      "zh": "B1"
+    },
+    "variants": {
+      "en": [
+        "The rent is due next week, so I need to talk to the landlord about the heating.",
+        "Since the rent is due next week, I need to speak with the landlord about the heating."
+      ],
+      "no": [
+        "Husleien forfaller neste uke, så jeg må snakke med utleieren om oppvarmingen.",
+        "Siden husleien forfaller neste uke, må jeg snakke med utleieren om oppvarmingen."
+      ],
+      "zh": [
+        "房租下周到期，所以我得跟房东谈谈暖气的事。",
+        "因为房租下周到期，我需要和房东谈谈暖气的问题。"
+      ]
+    },
+    "tags": [
+      "housing",
+      "rent",
+      "landlord",
+      "modal_verbs"
+    ],
+    "notes": [
+      {
+        "term": "forfaller",
+        "text": "“到期”；常用于房租、账单等付款期限。"
+      },
+      {
+        "term": "utleieren",
+        "text": "“房东（定指形式）”；utleier 的定指单数形式。"
+      },
+      {
+        "term": "så jeg må",
+        "text": "“所以……必须”；så 后接主句，使用正常词序 jeg må。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-17T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-17T14:00:44.193Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Accurate, natural B1 everyday housing item; variants align well across English, Norwegian and Chinese."
+    }
+  },
+  {
+    "id": "ai_20261117_academic_02_d348cd",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "writing",
+    "levels": {
+      "en": "B2",
+      "no": "B2",
+      "zh": "B2"
+    },
+    "variants": {
+      "en": [
+        "The results should be interpreted with caution because the sample size was relatively small.",
+        "Given the relatively small sample size, the findings should be interpreted with caution."
+      ],
+      "no": [
+        "Resultatene bør tolkes med forsiktighet fordi utvalgsstørrelsen var relativt liten.",
+        "Siden utvalgsstørrelsen var relativt liten, bør resultatene tolkes med forsiktighet."
+      ],
+      "zh": [
+        "由于样本量相对较小，结果应谨慎解读。",
+        "因为样本量相对较小，所以应谨慎解读结果。"
+      ]
+    },
+    "tags": [
+      "academic_writing",
+      "hedging",
+      "passive_voice",
+      "research_methods"
+    ],
+    "notes": [
+      {
+        "term": "bør tolkes",
+        "text": "“应该被解读”；bør 后接被动不定式，构成学术写作中常见的谨慎表达。"
+      },
+      {
+        "term": "utvalgsstørrelsen",
+        "text": "“样本量”；utvalg 的复合词定指形式，常用于研究方法语境。"
+      },
+      {
+        "term": "med forsiktighet",
+        "text": "“谨慎地”；固定搭配，常用于学术写作中的 hedging。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-17T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-17T14:00:44.193Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "English variant 2 uses 'findings', while the Norwegian and Chinese versions use 'results' (resultatene / 结果); align the terminology across languages."
+    }
+  },
+  {
+    "id": "ai_20261117_everyday_03_3f915e",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "work",
+    "levels": {
+      "en": "C1",
+      "no": "C1",
+      "zh": "C1"
+    },
+    "variants": {
+      "en": [
+        "If the client hadn't changed the deadline at the last minute, we wouldn't have had to work overtime all weekend.",
+        "Had the client not moved the deadline at the last minute, we wouldn't have had to work overtime all weekend."
+      ],
+      "no": [
+        "Hvis kunden ikke hadde endret fristen i siste liten, hadde vi ikke trengt å jobbe overtid hele helgen.",
+        "Hadde ikke kunden endret fristen i siste liten, hadde vi ikke trengt å jobbe overtid hele helgen."
+      ],
+      "zh": [
+        "如果客户没有在最后一刻改截止日期，我们整个周末就不必加班了。",
+        "要不是客户在最后一刻改了截止日期，我们整个周末就不用加班了。"
+      ]
+    },
+    "tags": [
+      "work",
+      "deadline",
+      "past_unreal",
+      "conditionals",
+      "overtime"
+    ],
+    "notes": [
+      {
+        "term": "i siste liten",
+        "text": "“在最后一刻”；固定表达，语气自然。"
+      },
+      {
+        "term": "hadde ... endret",
+        "text": "过去完成时结构；用于表达过去未发生的条件。"
+      },
+      {
+        "term": "hadde ikke trengt å jobbe",
+        "text": "“本不必加班”；trengte 后接 å + 不定式，整体表示过去条件下的结果。"
+      },
+      {
+        "term": "jobbe overtid",
+        "text": "“加班”；overtid 与 jobbe 构成常见搭配。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-17T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-17T14:00:44.193Z",
+      "score": 13,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "English variant 2 uses 'moved the deadline', while Norwegian uses 'endret' and Chinese uses '改' (changed); this is a slight semantic mismatch.; The everyday track includes formal/literary inverted conditionals in English and Norwegian ('Had the client not...', 'Hadde ikke kunden...'), while the Chinese variant is colloquial; register is inconsistent.; The note for 'hadde ikke trengt å jobbe' incorrectly says 'trengte 后接 å + 不定式'; the form in the phrase is the past participle 'trengt', not the simple past 'trengte'."
+    }
   }
 ]
