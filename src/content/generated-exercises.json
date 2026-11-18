@@ -132,5 +132,204 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261118_everyday_01_fd28cc",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "health",
+    "levels": {
+      "en": "B2",
+      "no": "B2",
+      "zh": "B2"
+    },
+    "variants": {
+      "en": [
+        "If I don't get enough sleep, I find it harder to concentrate the next day.",
+        "If I don't sleep enough, I find it harder to focus the next day."
+      ],
+      "no": [
+        "Hvis jeg ikke får nok søvn, synes jeg det er vanskeligere å konsentrere meg dagen etter.",
+        "Dersom jeg ikke sover nok, har jeg vanskeligere for å konsentrere meg dagen etter."
+      ],
+      "zh": [
+        "如果睡眠不足，我第二天就更难集中注意力。",
+        "如果睡不够，我第二天就更难集中精神。"
+      ]
+    },
+    "tags": [
+      "health",
+      "sleep",
+      "conditional_sentences",
+      "comparatives"
+    ],
+    "notes": [
+      {
+        "term": "få nok søvn",
+        "text": "“获得足够睡眠”；这是挪威语中描述睡眠充足的自然搭配，比只说 sove nok 更强调睡眠量。"
+      },
+      {
+        "term": "synes jeg det er vanskeligere",
+        "text": "“我觉得更难”；synes 表示主观看法，后接 det er + 比较级结构。"
+      },
+      {
+        "term": "集中注意力",
+        "text": "中文常用动宾搭配，对应英语 concentrate/focus 和挪威语 konsentrere seg。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-18T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-18T14:00:51.062Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "All three languages preserve the everyday health meaning; variants are natural and level-appropriate, with accurate and useful notes."
+    }
+  },
+  {
+    "id": "ai_20261118_academic_02_cb67a1",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "conference",
+    "levels": {
+      "en": "C1",
+      "no": "C1",
+      "zh": "C1"
+    },
+    "variants": {
+      "en": [
+        "Before presenting the preliminary findings, the researcher acknowledged that the sample size might limit how broadly the results can be generalized.",
+        "Prior to presenting the preliminary findings, the researcher acknowledged that the sample size might limit how widely the results can be generalized."
+      ],
+      "no": [
+        "Før presentasjonen av de foreløpige funnene erkjente forskeren at utvalgets størrelse kunne begrense hvor bredt resultatene kan generaliseres.",
+        "Før de foreløpige funnene ble presentert, erkjente forskeren at utvalgets størrelse kunne begrense i hvilken grad resultatene kan generaliseres."
+      ],
+      "zh": [
+        "在展示初步研究结果之前，研究者承认样本量可能会限制结果能够推广的范围。",
+        "在介绍初步发现之前，研究者承认样本量可能限制研究结果的可推广程度。"
+      ]
+    },
+    "tags": [
+      "academic_conference",
+      "research_methods",
+      "hedging",
+      "passive_voice"
+    ],
+    "notes": [
+      {
+        "term": "acknowledge",
+        "text": "学术语境中表示“承认（局限、事实等）”，语气比 admit 更中性。"
+      },
+      {
+        "term": "sample size",
+        "text": "对应挪威语 utvalgets størrelse，中文“样本量”；学术写作中常与 limit、generalize 等词搭配。"
+      },
+      {
+        "term": "generalize",
+        "text": "研究方法语境中常译“推广、外推”；被动形式 can be generalized 很常见。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-18T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-18T14:00:51.062Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Academic register and hedging are consistent across languages; Norwegian and Chinese variants accurately reflect the English meaning."
+    }
+  },
+  {
+    "id": "ai_20261118_everyday_03_1a485a",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "daily",
+    "levels": {
+      "en": "C2",
+      "no": "C2",
+      "zh": "C2"
+    },
+    "variants": {
+      "en": [
+        "By the time I got home, I realized I had left my umbrella on the bus, even though I'd checked the seat twice.",
+        "By the time I got home, it dawned on me that I had left my umbrella on the bus, even though I'd checked the seat twice."
+      ],
+      "no": [
+        "Da jeg kom hjem, innså jeg at jeg hadde lagt igjen paraplyen på bussen, selv om jeg hadde sjekket setet to ganger.",
+        "Da jeg kom hjem, gikk det opp for meg at jeg hadde lagt igjen paraplyen på bussen, selv om jeg hadde sjekket setet to ganger."
+      ],
+      "zh": [
+        "到家时我才意识到，尽管我已经检查过两次座位，还是把伞落在公交车上了。",
+        "等我到家才发现，自己虽然检查了座位两遍，却还是把伞忘在公交车上了。"
+      ]
+    },
+    "tags": [
+      "daily_life",
+      "public_transport",
+      "past_perfect",
+      "concession"
+    ],
+    "notes": [
+      {
+        "term": "by the time",
+        "text": "引导时间状语，强调“到……的时候”；主句常用一般过去，先发生的动作用过去完成时。"
+      },
+      {
+        "term": "had left",
+        "text": "过去完成时表示“落在车上”发生在“意识到”之前。"
+      },
+      {
+        "term": "selv om",
+        "text": "引导让步从句，对应中文“尽管、虽然”，后接正常陈述词序。"
+      },
+      {
+        "term": "把伞落在公交车上",
+        "text": "中文用“把”字句强调宾语的处置结果；也可说“伞忘在公交车上”。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-18T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-18T14:00:51.062Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "The C2 everyday narrative is preserved well in all languages; tense, concession and idiomatic variants are handled accurately."
+    }
   }
 ]
