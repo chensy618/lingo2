@@ -132,5 +132,209 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261119_everyday_01_bb6bb7",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "work",
+    "levels": {
+      "en": "C1",
+      "no": "C1",
+      "zh": "C1"
+    },
+    "variants": {
+      "en": [
+        "Had it not been for my colleague's last-minute intervention, the client would have walked away from the deal.",
+        "If my colleague had not intervened at the last minute, the client would have walked away from the deal."
+      ],
+      "no": [
+        "Hadde det ikke vært for at kollegaen min grep inn i siste liten, ville kunden ha trukket seg fra avtalen.",
+        "Hvis kollegaen min ikke hadde grepet inn i siste liten, ville kunden ha trukket seg fra avtalen."
+      ],
+      "zh": [
+        "若不是我的同事在最后一刻介入，客户本会放弃这笔交易。",
+        "如果不是我的同事在最后一刻介入，客户就会放弃这笔交易了。"
+      ]
+    },
+    "tags": [
+      "workplace_communication",
+      "third_conditional",
+      "inversion",
+      "idiomatic_expression"
+    ],
+    "notes": [
+      {
+        "term": "Had it not been for",
+        "text": "“要不是……”；这是虚拟条件句的倒装形式，语气较正式，相当于 If it had not been for。"
+      },
+      {
+        "term": "walk away from the deal",
+        "text": "“退出/放弃这笔交易”；walk away from 常与 deal、negotiation 等搭配，表示不再参与。"
+      },
+      {
+        "term": "i siste liten",
+        "text": "“在最后一刻”；挪威语固定表达，相当于英语的 at the last minute。"
+      },
+      {
+        "term": "ville kunden ha trukket seg",
+        "text": "“客户本会退出”；条件完成式主句可用 ville + 主语 + ha + 过去分词，这里因倒装将 ville 置于句首。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-19T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-19T14:01:17.052Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Accurate, natural, and level-appropriate; no issues found."
+    }
+  },
+  {
+    "id": "ai_20261119_academic_02_21d77e",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "review",
+    "levels": {
+      "en": "C2",
+      "no": "C2",
+      "zh": "C2"
+    },
+    "variants": {
+      "en": [
+        "While the review acknowledges the study's methodological limitations, it nonetheless overstates the generalizability of findings drawn from a single-site sample.",
+        "Although the review acknowledges the study's methodological limitations, it nevertheless overstates how far findings from a single-site sample can be generalized."
+      ],
+      "no": [
+        "Selv om gjennomgangen anerkjenner studiens metodiske begrensninger, overdriver den likevel generaliserbarheten til funn fra et utvalg ved én enkelt institusjon.",
+        "Gjennomgangen anerkjenner studiens metodiske begrensninger, men overdriver likevel hvor generaliserbare funnene fra et utvalg ved én enkelt institusjon er."
+      ],
+      "zh": [
+        "尽管该综述承认了该研究的方法学局限，但它仍然夸大了基于单中心样本所得发现的可推广性。",
+        "该综述虽然承认了该研究的方法学局限，却仍夸大了单中心样本研究结果的可推广性。"
+      ]
+    },
+    "tags": [
+      "academic_review",
+      "concession",
+      "methodology",
+      "generalizability",
+      "formal_register"
+    ],
+    "notes": [
+      {
+        "term": "generalizability",
+        "text": "“可推广性/普适性”；学术语境中常指研究结果能否推广到更广的人群或情境。"
+      },
+      {
+        "term": "single-site sample",
+        "text": "“单中心样本”；site 在此指研究现场或机构，single-site 强调数据只来自一个地点。"
+      },
+      {
+        "term": "nonetheless / nevertheless",
+        "text": "“尽管如此、然而”；用于让步后的转折，语气正式，适合学术写作。"
+      },
+      {
+        "term": "overstates",
+        "text": "“夸大、过度强调”；overstate 常与 claim、importance、generalizability 等抽象名词搭配。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-19T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-19T14:01:17.052Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Accurate academic paraphrase; notes and tags are appropriate."
+    }
+  },
+  {
+    "id": "ai_20261119_everyday_03_59018f",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "society",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "I say hello to my neighbors every morning.",
+        "Every morning, I greet my neighbors."
+      ],
+      "no": [
+        "Jeg sier hei til naboene mine hver morgen.",
+        "Hver morgen hilser jeg på naboene mine."
+      ],
+      "zh": [
+        "我每天早上都跟邻居们打招呼。",
+        "每天早上，我都会跟邻居们问好。"
+      ]
+    },
+    "tags": [
+      "greetings",
+      "daily_routine",
+      "neighbors",
+      "present_tense"
+    ],
+    "notes": [
+      {
+        "term": "sier hei til",
+        "text": "“向……问好/打招呼”；si hei til noen 是挪威语常用搭配。"
+      },
+      {
+        "term": "naboene mine",
+        "text": "“我的邻居们”；名词定指复数 naboene + 物主代词 mine。"
+      },
+      {
+        "term": "hver morgen",
+        "text": "“每天早上”；表示习惯性频率，挪威语中置于句末或句首均可，置于句首时主句要倒装。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-19T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-19T14:01:17.052Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "English variant 2 uses 'greet' and Norwegian 'hilser på', which may be above A1; consider simpler wording or relabel A2."
+    }
   }
 ]
