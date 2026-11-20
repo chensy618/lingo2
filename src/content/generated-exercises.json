@@ -132,5 +132,196 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261120_everyday_01_693ac4",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "daily",
+    "levels": {
+      "en": "C2",
+      "no": "C2",
+      "zh": "C2"
+    },
+    "variants": {
+      "en": [
+        "By the time I finally get home after a long day, the last thing I feel like doing is cooking, so I usually throw together something quick and call it dinner.",
+        "By the time I finally get home after a long day, cooking is the last thing I feel like doing, so I usually throw together something quick and call it dinner."
+      ],
+      "no": [
+        "Når jeg endelig kommer hjem etter en lang dag, er matlaging det siste jeg har lyst til, så jeg slenger vanligvis sammen noe raskt og kaller det middag.",
+        "Etter en lang dag, når jeg endelig kommer hjem, er matlaging det siste jeg har lyst til, så jeg slenger vanligvis sammen noe raskt og kaller det middag."
+      ],
+      "zh": [
+        "漫长的一天结束后，等我终于回到家时，我最不想做的就是做饭，所以我通常随便凑合点快的，就当晚饭了。",
+        "等我终于结束漫长的一天回到家时，我最不想做的就是做饭，所以我通常随便弄点快的，就当晚饭了。"
+      ]
+    },
+    "tags": [
+      "daily_routine",
+      "idiomatic_expression",
+      "time_clause",
+      "complex_sentence"
+    ],
+    "notes": [
+      {
+        "term": "the last thing I feel like doing",
+        "text": "“我最不想做的事”；口语中常用 the last thing + 定语从句来表达强烈的否定或反感。"
+      },
+      {
+        "term": "by the time",
+        "text": "“等到……的时候”；引导时间状语从句，主句可根据语境使用现在时、将来时或完成时。"
+      },
+      {
+        "term": "slenger sammen",
+        "text": "挪威语口语搭配，意为“随便凑合着做（饭）”；比 lager 更随意，语域偏日常。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-20T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-20T14:00:49.173Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Accurate, natural, level-appropriate C2 everyday item; notes and tags are sound."
+    }
+  },
+  {
+    "id": "ai_20261120_academic_02_72b7ee",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "research",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "This research is new."
+      ],
+      "no": [
+        "Denne forskningen er ny."
+      ],
+      "zh": [
+        "这项研究是新的。"
+      ]
+    },
+    "tags": [
+      "academic_research",
+      "simple_present",
+      "uncountable_noun"
+    ],
+    "notes": [
+      {
+        "term": "research",
+        "text": "不可数名词，通常不加 a/an，也没有复数形式；表示“研究”。"
+      },
+      {
+        "term": "Denne forskningen",
+        "text": "挪威语中 forskning 的定冠词形式是 forskningen，这里指“这项研究”。"
+      },
+      {
+        "term": "这项研究",
+        "text": "中文用“项”作量词；英语 this research 对应“这项研究”。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-20T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-20T14:00:49.173Z",
+      "score": 14,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "A1 label is not credible for 'research/forskning/研究'; the item is abstract and above A1.; The sentence is too plain to represent academic register, despite the academic track."
+    }
+  },
+  {
+    "id": "ai_20261120_everyday_03_06d70b",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "opinion",
+    "levels": {
+      "en": "A2",
+      "no": "A2",
+      "zh": "A2"
+    },
+    "variants": {
+      "en": [
+        "I think the new café is too noisy, so I prefer the one across the street.",
+        "The new café is too noisy for me, so I prefer the one across the street."
+      ],
+      "no": [
+        "Jeg synes den nye kafeen er for bråkete, så jeg foretrekker den på den andre siden av gaten.",
+        "Den nye kafeen er for bråkete for meg, så jeg foretrekker den på den andre siden av gaten."
+      ],
+      "zh": [
+        "我觉得新开的咖啡馆太吵了，所以我更喜欢街对面那家。",
+        "新开的咖啡馆对我来说太吵了，所以我更喜欢街对面那家。"
+      ]
+    },
+    "tags": [
+      "opinion",
+      "comparison",
+      "cause_effect",
+      "everyday_language"
+    ],
+    "notes": [
+      {
+        "term": "synes",
+        "text": "表示“觉得、认为”，常用于表达主观看法；后接从句时使用正常陈述词序。"
+      },
+      {
+        "term": "for bråkete",
+        "text": "for 表示“太、过于”，修饰形容词；bråkete 意为“吵闹的”。"
+      },
+      {
+        "term": "foretrekker den",
+        "text": "foretrekker 意为“更喜欢”，后接名词；den 指代前文的 kafeen。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-20T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-20T14:00:49.173Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Variants align well across languages; A2 everyday register and notes are appropriate."
+    }
   }
 ]
