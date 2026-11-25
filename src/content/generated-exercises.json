@@ -132,5 +132,212 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261125_everyday_01_62f53b",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "shopping",
+    "levels": {
+      "en": "C1",
+      "no": "C1",
+      "zh": "C1"
+    },
+    "variants": {
+      "en": [
+        "Had the shop been clearer about its return policy, I wouldn't have bought the coat in the first place.",
+        "If the shop had made its return policy clearer, I wouldn't have bought the coat to begin with."
+      ],
+      "no": [
+        "Hadde butikken vært tydeligere på returordningen, ville jeg ikke ha kjøpt kåpen i utgangspunktet.",
+        "Hvis butikken hadde gjort returordningen tydeligere, ville jeg ikke ha kjøpt kåpen i utgangspunktet."
+      ],
+      "zh": [
+        "如果商店当初把退货政策说明得更清楚，我根本就不会买那件外套。",
+        "要是商店把退货政策说得更清楚，我一开始就不会买那件外套。"
+      ]
+    },
+    "tags": [
+      "shopping",
+      "third_conditional",
+      "inversion",
+      "return_policy"
+    ],
+    "notes": [
+      {
+        "term": "Had the shop been",
+        "text": "英语第三条件句的倒装形式，相当于 If the shop had been；语气较正式。"
+      },
+      {
+        "term": "i utgangspunktet",
+        "text": "挪威语意为“一开始、原本”，与英语 in the first place / to begin with 对应。"
+      },
+      {
+        "term": "把退货政策说明得更清楚",
+        "text": "汉语“把”字句，强调对“退货政策”的处理结果；说明得更清楚 对应 clearer / made clearer。"
+      },
+      {
+        "term": "returordning",
+        "text": "“退货政策/退货安排”；购物语境中比 returpolicy 更常用、更自然。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-25T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-25T14:01:17.381Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "All three languages align well; C1 conditional/inversion is natural and notes are accurate."
+    }
+  },
+  {
+    "id": "ai_20261125_academic_02_7fffdd",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "review",
+    "levels": {
+      "en": "C2",
+      "no": "C2",
+      "zh": "C2"
+    },
+    "variants": {
+      "en": [
+        "While the review acknowledges the study's methodological limitations, it nonetheless overstates the generalizability of the findings.",
+        "Although the review acknowledges the study's methodological limitations, it nevertheless overstates how generalizable the findings are."
+      ],
+      "no": [
+        "Selv om gjennomgangen anerkjenner studiens metodologiske begrensninger, overdriver den likevel generaliserbarheten til funnene.",
+        "Gjennomgangen anerkjenner studiens metodologiske begrensninger, men overdriver likevel hvor generaliserbare funnene er."
+      ],
+      "zh": [
+        "尽管该综述承认这项研究在方法上的局限性，但它仍然夸大了研究结果的普适性。",
+        "该综述虽承认该研究的方法局限，却仍夸大了研究结果的普适性。"
+      ]
+    },
+    "tags": [
+      "academic_review",
+      "concession",
+      "hedging",
+      "generalizability"
+    ],
+    "notes": [
+      {
+        "term": "methodological limitations",
+        "text": "“方法上的局限性”；学术写作常用搭配，比 problems 更正式。"
+      },
+      {
+        "term": "generalizability",
+        "text": "“普适性、可推广性”；指研究结果能否推广到更广的人群或情境。"
+      },
+      {
+        "term": "likevel",
+        "text": "“仍然、nevertheless”；常放在主语之后、宾语之前，如 overdriver den likevel generaliserbarheten。"
+      },
+      {
+        "term": "尽管……但……",
+        "text": "汉语让步复句；与英语 While/Although... nonetheless/nevertheless 对应。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-25T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-25T14:01:17.381Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Academic register and C2 vocabulary are consistent; Norwegian word order and notes are correct."
+    }
+  },
+  {
+    "id": "ai_20261125_everyday_03_506bcf",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "housing",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "I live in a small apartment near the bus stop.",
+        "I live in a small apartment close to the bus stop."
+      ],
+      "no": [
+        "Jeg bor i en liten leilighet nær bussholdeplassen.",
+        "Jeg bor i en liten leilighet i nærheten av bussholdeplassen."
+      ],
+      "zh": [
+        "我住在公交站附近的一间小公寓里。",
+        "我住在一间靠近公交站的小公寓里。"
+      ]
+    },
+    "tags": [
+      "housing",
+      "prepositions",
+      "adjective_agreement",
+      "daily_life"
+    ],
+    "notes": [
+      {
+        "term": "bor i en liten leilighet",
+        "text": "“住在一间小公寓里”；bor i 用于城市、国家、住所等空间内部。"
+      },
+      {
+        "term": "en liten leilighet",
+        "text": "leilighet 是通性名词，不定单数用 en；形容词 liten 在单数通性中保持 liten。"
+      },
+      {
+        "term": "nær / i nærheten av",
+        "text": "两者都表示“靠近”；nær 后直接接名词，i nærheten av 更口语、稍长。"
+      },
+      {
+        "term": "公交站附近的一间小公寓",
+        "text": "汉语定语顺序：地点短语“公交站附近”放在“一间小公寓”前，并用“的”连接。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-25T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-25T14:01:17.381Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Variant 2 uses 'close to' / 'i nærheten av' / '靠近', which are above A1; either label the exercise A2 or simplify to A1-level synonyms."
+    }
   }
 ]
