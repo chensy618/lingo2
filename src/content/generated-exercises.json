@@ -132,5 +132,208 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261127_everyday_01_9445b6",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "housing",
+    "levels": {
+      "en": "A1",
+      "no": "A1",
+      "zh": "A1"
+    },
+    "variants": {
+      "en": [
+        "I live in a small apartment near the city center.",
+        "I live in a little apartment close to the city center."
+      ],
+      "no": [
+        "Jeg bor i en liten leilighet nær sentrum.",
+        "Jeg bor i en liten leilighet like ved sentrum."
+      ],
+      "zh": [
+        "我住在市中心附近的一间小公寓里。",
+        "我住在一间小公寓里，离市中心很近。"
+      ]
+    },
+    "tags": [
+      "housing",
+      "place_prepositions",
+      "word_order",
+      "present_tense"
+    ],
+    "notes": [
+      {
+        "term": "leilighet",
+        "text": "“公寓”，挪威语中为通性名词，不定指时用 en leilighet，定指时为 leiligheten。"
+      },
+      {
+        "term": "nær sentrum",
+        "text": "“靠近市中心”；nær 是介词，后面直接接名词，表示地点时 sentrum 通常不加定冠词。"
+      },
+      {
+        "term": "bor",
+        "text": "bor 是 bo（居住）的现在时。挪威语陈述句遵循 V2 规则：主语之后紧跟动词，如 Jeg bor …。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-27T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-27T14:00:54.337Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Accurate, natural, level-appropriate, and well-annotated."
+    }
+  },
+  {
+    "id": "ai_20261127_academic_02_8b863b",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "methods",
+    "levels": {
+      "en": "A2",
+      "no": "A2",
+      "zh": "A2"
+    },
+    "variants": {
+      "en": [
+        "We collected data from twenty students over two weeks.",
+        "Over two weeks, we collected data from twenty students."
+      ],
+      "no": [
+        "Vi samlet inn data fra tjue studenter over to uker.",
+        "Vi samlet inn data fra tjue studenter i løpet av to uker."
+      ],
+      "zh": [
+        "我们在两周内收集了二十名学生的数据。",
+        "我们用两周时间收集了二十名学生的数据。"
+      ]
+    },
+    "tags": [
+      "academic_methods",
+      "data_collection",
+      "past_tense",
+      "time_expressions"
+    ],
+    "notes": [
+      {
+        "term": "samle inn",
+        "text": "“收集、采集”，是可分动词短语：Vi samlet inn data …，名词宾语也可插在中间，如 samlet data inn。"
+      },
+      {
+        "term": "data",
+        "text": "学术语境中表示“数据”，挪威语里常作不可数整体使用，不加复数词尾，如 mye data、dataene（定指）。"
+      },
+      {
+        "term": "i løpet av",
+        "text": "“在……期间之内”，后接时间段，比单纯用 over 更书面，常见于方法与流程描述。"
+      },
+      {
+        "term": "fra tjue studenter",
+        "text": "“来自二十名学生”；介词 fra 标明数据来源，数字二十写作 tjue，正式文本中也可见 tyve。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-27T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-27T14:00:54.337Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "The note on 'data' is inaccurate/misleading: it calls 'data' uncountable and gives 'mye data', but in Norwegian academic usage 'data' is normally plural (definite 'dataene'); the note also contradicts itself by citing 'dataene' after saying no plural ending."
+    }
+  },
+  {
+    "id": "ai_20261127_everyday_03_e1a58c",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "work",
+    "levels": {
+      "en": "B1",
+      "no": "B1",
+      "zh": "B1"
+    },
+    "variants": {
+      "en": [
+        "I have to finish the report before the meeting tomorrow morning.",
+        "I need to get the report done before tomorrow morning's meeting."
+      ],
+      "no": [
+        "Jeg må bli ferdig med rapporten før møtet i morgen tidlig.",
+        "Jeg må gjøre ferdig rapporten før møtet i morgen tidlig."
+      ],
+      "zh": [
+        "我得在明天早上开会之前把报告写完。",
+        "明天早上开会前，我得把报告写完。"
+      ]
+    },
+    "tags": [
+      "work",
+      "deadlines",
+      "modal_verbs",
+      "time_clauses"
+    ],
+    "notes": [
+      {
+        "term": "bli ferdig med",
+        "text": "“把……做完”，强调进入完成状态；宾语用 med + 名词，如 bli ferdig med rapporten。"
+      },
+      {
+        "term": "gjøre ferdig",
+        "text": "“把……做完”，强调动作本身，可直接带宾语：gjøre ferdig rapporten。与 bli ferdig med 意思接近，但视角不同。"
+      },
+      {
+        "term": "før møtet",
+        "text": "“在会议之前”；før 作介词时后面用定指形式 møtet，指双方都知道的那场会议。"
+      },
+      {
+        "term": "må",
+        "text": "情态动词“必须、得”，后面接动词原形，如 Jeg må bli … / Jeg må gjøre …，不添加 å。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-27T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-27T14:00:54.337Z",
+      "score": 16,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Accurate, natural, level-appropriate, and well-annotated."
+    }
   }
 ]
