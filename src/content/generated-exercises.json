@@ -132,5 +132,212 @@
       },
       "notes": "AI 辅助审核：将挪威语等级修正为 A2，并将中文“很好”改为“不错”以匹配 good 的强度；建议仓库所有者合并前最终确认。"
     }
+  },
+  {
+    "id": "ai_20261128_everyday_01_a474bd",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "health",
+    "levels": {
+      "en": "A2",
+      "no": "A2",
+      "zh": "A2"
+    },
+    "variants": {
+      "en": [
+        "I have a sore throat, so I need to book a doctor's appointment.",
+        "Because I have a sore throat, I need to make an appointment with the doctor."
+      ],
+      "no": [
+        "Jeg har vondt i halsen, så jeg må bestille time hos legen.",
+        "Fordi jeg har vondt i halsen, må jeg bestille time hos legen."
+      ],
+      "zh": [
+        "我嗓子疼，所以需要预约看医生。",
+        "因为嗓子疼，我需要预约看医生。"
+      ]
+    },
+    "tags": [
+      "health",
+      "symptoms",
+      "appointments",
+      "cause_effect"
+    ],
+    "notes": [
+      {
+        "term": "bestille time hos legen",
+        "text": "“预约看医生”；挪威语常用 bestille time hos legen 表示向医生预约时间。"
+      },
+      {
+        "term": "vondt i halsen",
+        "text": "“嗓子疼”；固定搭配 ha vondt i + 身体部位。"
+      },
+      {
+        "term": "så / fordi",
+        "text": "så 引导结果从句时用正常词序；fordi 引导原因从句，主句可倒装，如 Fordi jeg ... , må jeg ...。"
+      },
+      {
+        "term": "预约看医生",
+        "text": "中文自然说法；也可说“预约医生”，但“预约看医生”更口语化。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-28T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-28T14:01:06.601Z",
+      "score": 14,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Chinese '预约看医生' is understandable but less idiomatic than '预约医生' or '预约看病'; the note's claim that it is more colloquial is questionable.; The note on 'så / fordi' says the main clause '可倒装' (can invert), but inversion is obligatory when a fordi-clause is fronted."
+    }
+  },
+  {
+    "id": "ai_20261128_academic_02_f728f2",
+    "type": "sentence_translation",
+    "track": "academic",
+    "topic": "data",
+    "levels": {
+      "en": "B1",
+      "no": "B1",
+      "zh": "B1"
+    },
+    "variants": {
+      "en": [
+        "The survey data were collected from 200 participants and analyzed using descriptive statistics.",
+        "We collected the survey data from 200 participants and analyzed them with descriptive statistics."
+      ],
+      "no": [
+        "Spørreundersøkelsesdataene ble samlet inn fra 200 deltakere og analysert ved hjelp av deskriptiv statistikk.",
+        "Vi samlet inn spørreundersøkelsesdataene fra 200 deltakere og analyserte dem med deskriptiv statistikk."
+      ],
+      "zh": [
+        "调查数据来自200名参与者，并使用描述性统计进行了分析。",
+        "我们收集了200名参与者的调查数据，并用描述性统计进行了分析。"
+      ]
+    },
+    "tags": [
+      "data_collection",
+      "descriptive_statistics",
+      "passive_voice",
+      "academic_writing"
+    ],
+    "notes": [
+      {
+        "term": "ble samlet inn",
+        "text": "被动语态过去时；挪威语学术写作中常用 bli + 过去分词描述数据收集过程。"
+      },
+      {
+        "term": "ved hjelp av",
+        "text": "“借助/使用”；比 med 更正式，常用于学术方法描述。"
+      },
+      {
+        "term": "descriptive statistics",
+        "text": "“描述性统计”；英文 data 在正式学术语境中常作复数，搭配 were collected。"
+      },
+      {
+        "term": "调查数据",
+        "text": "中文名词短语；“来自200名参与者”也可说“从200名参与者处收集”。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-28T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-28T14:01:06.601Z",
+      "score": 13,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Chinese variant 1 has a dangling subject: '调查数据...并...进行了分析' reads as if the data performed the analysis; use '对调查数据进行了分析' or '我们使用...分析了调查数据'.; B1 level is doubtful for 'Spørreundersøkelsesdataene' and 'deskriptiv statistikk'."
+    }
+  },
+  {
+    "id": "ai_20261128_everyday_03_da0a5d",
+    "type": "sentence_translation",
+    "track": "everyday",
+    "topic": "daily",
+    "levels": {
+      "en": "B2",
+      "no": "B2",
+      "zh": "B2"
+    },
+    "variants": {
+      "en": [
+        "By the time I finally got home, I was too tired to cook, so I ordered something online.",
+        "When I finally got home, I was so tired that I couldn't cook, so I ordered something online."
+      ],
+      "no": [
+        "Da jeg endelig kom hjem, var jeg for trøtt til å lage mat, så jeg bestilte noe på nettet.",
+        "Da jeg endelig kom hjem, var jeg så trøtt at jeg ikke orket å lage mat, så jeg bestilte noe på nettet."
+      ],
+      "zh": [
+        "等我终于到家时，我累得做不了饭，就在网上点了些吃的。",
+        "我终于到家的时候，已经累得做不了饭，所以就在网上点了些吃的。"
+      ]
+    },
+    "tags": [
+      "daily_routine",
+      "time_clauses",
+      "result_clauses",
+      "online_ordering"
+    ],
+    "notes": [
+      {
+        "term": "by the time",
+        "text": "“到……的时候”；常与完成时或一般过去时搭配，强调时间截止点。"
+      },
+      {
+        "term": "for trøtt til å lage mat",
+        "text": "“太累而不能做饭”；for + 形容词 + til å + 不定式。"
+      },
+      {
+        "term": "så ... at",
+        "text": "“如此……以至于”；挪威语 så trøtt at jeg ikke orket ... 表示结果。"
+      },
+      {
+        "term": "累得做不了饭",
+        "text": "中文“得”字补语，表示程度导致的结果；口语中也可说“累得不想做饭”。"
+      }
+    ],
+    "origin": "ai",
+    "generatedAt": "2026-11-28T00:00:00.000Z",
+    "model": "maggie",
+    "review": {
+      "status": "needs_changes",
+      "reviewer": "maggie-auto-review",
+      "reviewedAt": "2026-11-28T14:01:06.601Z",
+      "score": 15,
+      "checklist": {
+        "semanticAlignment": false,
+        "naturalness": false,
+        "levelFit": false,
+        "registerFit": false,
+        "grammar": false,
+        "notesAccuracy": false,
+        "originality": false,
+        "technical": false
+      },
+      "notes": "Chinese '点了些吃的' specifies food, while EN 'something' and NO 'noe' are vague; use '点了些东西' for exact alignment.; Norwegian 'Da' corresponds to 'when', not the 'by the time' nuance of EN1; acceptable as paraphrase but not exact."
+    }
   }
 ]
